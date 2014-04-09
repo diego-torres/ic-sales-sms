@@ -8,6 +8,7 @@ namespace SMSSender
     interface ISendable
     {
         void SendSMS(Sms sms);
+        void DoLogin(string userName, string password);
     }
 
     public class Sms {
