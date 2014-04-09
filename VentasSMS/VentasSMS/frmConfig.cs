@@ -10,7 +10,8 @@ using System.IO;
 using System.Configuration;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
-using VentasSMS.AdminPaq.dto; 
+using CommonAdminPaq.dto;
+using CommonAdminPaq; 
 
 namespace VentasSMS
 {
@@ -52,7 +53,7 @@ namespace VentasSMS
                     break;
                 }
             }
-
+            evalSheet.Range["B3"].Value = "sysvalidated";
             return empresaEnLista;
         }
 

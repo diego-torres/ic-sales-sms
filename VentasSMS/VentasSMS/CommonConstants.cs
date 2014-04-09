@@ -5,7 +5,7 @@ using System.Text;
 
 namespace VentasSMS
 {
-    class CommonConstants
+    public class CommonConstants
     {
         public const string SMS_FILE_NAME = "smsWorkbook";
     }
