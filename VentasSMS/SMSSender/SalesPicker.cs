@@ -26,6 +26,7 @@ namespace SMSSender
                 {
                     case CommonConstants.SMS_MAS_MENSAJES:
                         sendable = new MasMensajes();
+                        sendable.DoLogin("inspiracode.sms", "52cbac");
                         break;
                     case CommonConstants.SMS_LOCAL:
                         sendable = new LocalSMS();
@@ -100,11 +101,27 @@ namespace SMSSender
             }
         }
 
+        private void RetrieveBosses(Empresa empresa, Excel.Range bossRange)
+        {
+            foreach (Excel.Range rowRange in bossRange)
+            {
+                int currentRow = rowRange.Row - 6;
+                Excel.Range currentRange = bossRange.Cells[currentRow, 1];
+                object oTemp = currentRange.Value;
+                if (oTemp != null)
+                {
+                    string sTemp = oTemp.ToString();
+                    empresa.TelefonosDirectores.Add(sTemp);
+                }
+            }
+        }
+
         private void RetrieveConfiguration(Excel.Worksheet workingSheet)
         {
-            Excel.Range rangoCodigosDevolucion, rangoCodigosVenta, rangoCodigoAgentes, rangoTelefonos, rangoMeta, rangoSysAgente;
+            Excel.Range rangoCodigosDevolucion, rangoCodigosVenta, rangoCodigoAgentes, rangoTelefonos, rangoMeta, rangoSysAgente, rangoDirectores;
             rangoCodigosDevolucion = RangoDeColumna(workingSheet, 2, 7);
             rangoCodigosVenta = RangoDeColumna(workingSheet, 1, 7);
+            rangoDirectores = RangoDeColumna(workingSheet, 11, 7);
             
             rangoCodigoAgentes = RangoDeColumna(workingSheet, 4, 7);
             int lastAgenteRow = 7 + rangoCodigoAgentes.Rows.Count - 1;
@@ -130,6 +147,7 @@ namespace SMSSender
 
             RetrieveSaleCodes(empresaHoja, rangoCodigosVenta);
             RetrieveReturnCodes(empresaHoja, rangoCodigosDevolucion);
+            RetrieveBosses(empresaHoja, rangoDirectores);
 
             IList<Agente> sheetAgents = new List<Agente>();
             // Retrieve agentes from worksheet
@@ -214,37 +232,72 @@ namespace SMSSender
             {
                 Console.WriteLine("Retrieving sales for company: [" + empresa.Nombre + "]");
                 api.RetrieveSales(empresa);
-
-                foreach(Agente agente in empresa.Agentes)
-                {
-                    CultureInfo provider = CultureInfo.CreateSpecificCulture("en-US");
-
-                    string cumplimientoSemanal = agente.Phone.CumplimientoSemana.ToString("P");
-                    string cumplimientoTentencia = agente.Phone.CumplimientoTendencia.ToString("P");
-                    string faltanteSemanal = agente.Phone.FaltanteSemana.ToString("C", provider);
-                    //string faltanteTendencia = agente.Phone.FaltanteTendencia.ToString("C", provider);
-
-                    string semanal = string.Format("Tu meta de venta de esta semana ha sido cumplida en un {0}, faltan {1} por vender.", 
-                        cumplimientoSemanal, faltanteSemanal);
-                    if (agente.Phone.CumplimientoSemana >= 1)
-                        semanal = "Felicidades! Haz alcanzado el {0} de ventas en tu meta semanal.";
-
-                    string tendencia = string.Format("Tendencia de cumplimiento a 4 semanas {0}", cumplimientoTentencia);
-
-
-                    string sms = string.Format("{0}: {1}. {2}", agente.Phone.PhoneNumber, semanal, tendencia);
-
-                    Console.WriteLine(sms);
-
-                    //Console.WriteLine("Tendencia Agente: [" + agente.Codigo + "]:[" + agente.Phone.CumplimientoTendencia + "](" + agente.Phone.FaltanteTendencia + ")");
-                }
-
             }
         }
 
         public void SendSMS() {
             if (!validateMe() || empresas == null) return;
-            throw new NotImplementedException();
+            foreach (Empresa empresa in empresas)
+            {
+                string sms;
+                foreach (Agente agente in empresa.Agentes)
+                {
+                    CultureInfo provider = CultureInfo.CreateSpecificCulture("en-US");
+
+                    string cumplimientoSemanal = agente.Phone.CumplimientoSemana.ToString("p");
+                    string cumplimientoTentencia = agente.Phone.CumplimientoTendencia.ToString("p");
+                    string faltanteSemanal = agente.Phone.FaltanteSemana.ToString("C", provider);
+
+                    empresa.ResultadoSemanal += string.Format("{0}:{1};", agente.Codigo, cumplimientoSemanal);
+                    empresa.Tendencia += string.Format("{0}:{1};", agente.Codigo, cumplimientoTentencia);
+                    //string faltanteTendencia = agente.Phone.FaltanteTendencia.ToString("C", provider);
+
+                    string semanal = string.Format("Tu meta de venta de esta semana ha sido cumplida en un {0}, faltan {1} por vender",
+                        cumplimientoSemanal, faltanteSemanal);
+                    if (agente.Phone.CumplimientoSemana >= 1)
+                        semanal = "Felicidades! Haz alcanzado el {0} de ventas en tu meta semanal";
+
+                    string tendencia = string.Format("Tendencia de cumplimiento a 4 semanas {0}", cumplimientoTentencia);
+
+
+                    sms = string.Format("{0}. {1}", semanal, tendencia);
+                    byeSMS(agente.Phone.PhoneNumber, sms);
+                }
+
+            }
+        }
+
+        public void SendBossSMS()
+        {
+
+            foreach (Empresa empresa in empresas)
+            {
+                string tituloSemanal, tituloTendencia, sms;
+
+                tituloSemanal = "Cumplimiento de metas en venta semanal";
+                sms = string.Format("{0}: {1}", tituloSemanal, empresa.ResultadoSemanal);
+                SendBossSMS(sms, empresa);
+                
+                tituloTendencia = "Tendencia de cumplimiento en metas de ventas a 4 semanas";
+                sms = string.Format("{0}: {1}", tituloTendencia, empresa.Tendencia);
+                SendBossSMS(sms, empresa);
+            }
+        }
+
+        private void SendBossSMS(string sms, Empresa empresa)
+        { 
+            foreach(string boss in empresa.TelefonosDirectores)
+            {
+                byeSMS(boss, sms);
+            }
+        }
+
+        private void byeSMS(string to, string msg)
+        {
+            Sms sms = new Sms();
+            sms.To = to;
+            sms.Message = msg;
+            sendable.SendSMS(sms);
         }
 
         private bool validateMe() {

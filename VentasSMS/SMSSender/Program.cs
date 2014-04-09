@@ -21,8 +21,8 @@ namespace SMSSender
             sp.SendMethod = CommonConstants.SMS_MAS_MENSAJES;
             sp.RetrieveConfiguration();
             sp.RetrieveSales();
-            //sp.SendSMS();
-            //sp.SendBossSMS();
+            sp.SendSMS();
+            sp.SendBossSMS();
             Console.ReadLine();
         }
     }

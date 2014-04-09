@@ -20,19 +20,22 @@ namespace CommonAdminPaq.dto
 
         // FIELD PROPERTIES FOR OBJECT
         private long id;
-        private string nombre;
-        private string ruta;
+        private string nombre, ruta, alias, resultadoSemanal, tendencia;
         private IList<Agente> agentes;
         private IList<long> cSale = new List<long>();
         private IList<long> cReturn = new List<long>();
+        private IList<string> directores = new List<string>();
 
         public long Id { get { return id; } set { id = value; } }
         public string Nombre { get { return nombre; } set { nombre = value; } }
         public string Ruta { get { return ruta; } set { ruta = value; } }
+        public string Alias { get { return alias; } set { alias = value; } }
         public IList<Agente> Agentes { get { return agentes; } set { agentes = value; } }
         public IList<long> CodigosVenta { get { return cSale; } set { cSale = value; } }
         public IList<long> CodigosDevolucion { get { return cReturn; } set { cReturn = value; } }
-        
+        public IList<string> TelefonosDirectores { get { return directores; } set { directores = value; } }
+        public string ResultadoSemanal { get { return resultadoSemanal; } set { resultadoSemanal = value; } }
+        public string Tendencia { get { return tendencia; } set { tendencia = value; } }
     }
     public class Agente
     {
