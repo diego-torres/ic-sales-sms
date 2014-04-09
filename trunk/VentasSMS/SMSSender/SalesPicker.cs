@@ -26,7 +26,7 @@ namespace SMSSender
                 {
                     case CommonConstants.SMS_MAS_MENSAJES:
                         sendable = new MasMensajes();
-                        sendable.DoLogin("inspiracode.sms", "52cbac");
+                        sendable.DoLogin("user", "password");
                         break;
                     case CommonConstants.SMS_LOCAL:
                         sendable = new LocalSMS();
