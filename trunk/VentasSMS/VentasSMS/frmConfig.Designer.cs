@@ -48,6 +48,7 @@
             this.textBoxFileName.Name = "textBoxFileName";
             this.textBoxFileName.Size = new System.Drawing.Size(248, 26);
             this.textBoxFileName.TabIndex = 0;
+            this.textBoxFileName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // labelFileName
             // 

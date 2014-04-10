@@ -16,6 +16,8 @@ namespace VentasSMS
     {
         private AdminPaqImpl api;
         public AdminPaqImpl API { get { return api; } }
+        private frmConfig fConfig = null;
+        private ScheduleConfig sConfig = null;
 
         public frmMain()
         {
@@ -31,16 +33,29 @@ namespace VentasSMS
         {
             api = new AdminPaqImpl();
             api.InitializeSDK();
-            this.WindowState = FormWindowState.Minimized;
-            this.Hide();
+            timer1.Start();
         }
 
         private void openConfigForm(string fileName) 
         {
-            frmConfig fConfig = new frmConfig();
-            fConfig.API = api;
-            fConfig.textBoxFileName.Text = fileName;
+            if (fConfig == null || fConfig.IsDisposed)
+            {
+                fConfig = new frmConfig();
+                fConfig.API = api;
+                fConfig.textBoxFileName.Text = fileName;
+            }
+
             fConfig.Show();
+        }
+
+        private void openScheduleConfig()
+        {
+            if (sConfig == null || sConfig.IsDisposed)
+            {
+                sConfig = new ScheduleConfig();
+            }
+
+            sConfig.Show();
         }
 
         private void telefonosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -60,6 +75,18 @@ namespace VentasSMS
                 System.Diagnostics.Process.Start(configFilePath);
             }
 
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.notifyIconSMS.Visible = true;
+            this.Hide();
+            timer1.Stop();
+        }
+
+        private void scheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openScheduleConfig();
         }
     }
 }
