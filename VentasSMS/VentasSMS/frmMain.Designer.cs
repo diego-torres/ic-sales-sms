@@ -33,7 +33,7 @@
             this.notifyIconSMS = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bitacoraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.telefonosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enviarSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +44,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -53,60 +54,60 @@
             this.notifyIconSMS.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIconSMS.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconSMS.Icon")));
             this.notifyIconSMS.Text = "SMS A ventas";
-            this.notifyIconSMS.Visible = true;
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startStopToolStripMenuItem,
-            this.bitacoraToolStripMenuItem,
+            this.scheduleToolStripMenuItem,
             this.toolStripSeparator2,
             this.telefonosToolStripMenuItem,
             this.enviarSMSToolStripMenuItem,
             this.toolStripSeparator1,
             this.salirToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 126);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 126);
             // 
             // startStopToolStripMenuItem
             // 
             this.startStopToolStripMenuItem.Name = "startStopToolStripMenuItem";
-            this.startStopToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.startStopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.startStopToolStripMenuItem.Text = "Iniciar / Detener";
             // 
-            // bitacoraToolStripMenuItem
+            // scheduleToolStripMenuItem
             // 
-            this.bitacoraToolStripMenuItem.Name = "bitacoraToolStripMenuItem";
-            this.bitacoraToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.bitacoraToolStripMenuItem.Text = "&Bitácora";
+            this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
+            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.scheduleToolStripMenuItem.Text = "&Agenda de envío";
+            this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(160, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(163, 6);
             // 
             // telefonosToolStripMenuItem
             // 
             this.telefonosToolStripMenuItem.Name = "telefonosToolStripMenuItem";
-            this.telefonosToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.telefonosToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.telefonosToolStripMenuItem.Text = "&Teléfonos";
             this.telefonosToolStripMenuItem.Click += new System.EventHandler(this.telefonosToolStripMenuItem_Click);
             // 
             // enviarSMSToolStripMenuItem
             // 
             this.enviarSMSToolStripMenuItem.Name = "enviarSMSToolStripMenuItem";
-            this.enviarSMSToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.enviarSMSToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.enviarSMSToolStripMenuItem.Text = "Enviar S&MS";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(163, 6);
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.salirToolStripMenuItem.Text = "&Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
@@ -158,6 +159,11 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Cargando configuración del programa, espere un momento.";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 2000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -189,7 +195,7 @@
 
         private System.Windows.Forms.NotifyIcon notifyIconSMS;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem bitacoraToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scheduleToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem enviarSMSToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -201,6 +207,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

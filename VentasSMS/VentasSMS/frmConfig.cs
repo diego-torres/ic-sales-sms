@@ -38,6 +38,11 @@ namespace VentasSMS
             this.Close();
         }
 
+        /// <summary>
+        /// Validar hoja de excel
+        /// </summary>
+        /// <param name="evalSheet"></param>
+        /// <returns></returns>
         private bool validateWorkSheet(Excel.Worksheet evalSheet)
         {
             toolStripStatusLabel1.Text = "Validando contenido de la hoja: " + evalSheet.Name;
@@ -46,6 +51,7 @@ namespace VentasSMS
             string sEmpresa = evalSheet.Range["B2"].Value;
             bool empresaEnLista = false;
             foreach(Empresa empresa in api.Empresas){
+                //sEmpresa.ToLower().Equals(empresa.Nombre.ToLower())
                 if (sEmpresa.Equals(empresa.Nombre)) {
                     empresaEnLista = true;
                     evalSheet.Range["B1"].Value = empresa.Id;
@@ -53,8 +59,27 @@ namespace VentasSMS
                     break;
                 }
             }
-            evalSheet.Range["B3"].Value = "sysvalidated";
-            return empresaEnLista;
+            if (!empresaEnLista)
+            {
+                evalSheet.Range["D1"].Value = "";
+                return false;
+            }
+
+            // Validar codigos de documentos
+            /*bool codigoEsValido = false;
+              //buscar en api
+              // si lo encuentras, codigoEsValido = true;
+            if (!codigoEsValido)
+            {
+                evalSheet.Range["D1"].Value = "";
+                return false;
+            }*/
+
+            // Validar codigos de agente y poner el sysid
+            
+
+            evalSheet.Range["D1"].Value = "sysvalidated";
+            return true;
         }
 
         private bool validateFile(string fileName) 
@@ -78,8 +103,9 @@ namespace VentasSMS
             toolStripProgressBar1.PerformStep(); // 60
 
             toolStripStatusLabel1.Text = "Validando hojas de configuración ...";
-            while (sheetIdx <= book.Worksheets.Count && !validated) {
+            while (sheetIdx <= book.Worksheets.Count) {
                 validated = validateWorkSheet(book.Worksheets[sheetIdx]);
+                if (!validated) return false;
                 sheetIdx++;
             }
 
@@ -107,7 +133,8 @@ namespace VentasSMS
              ConfigurationManager.OpenExeConfiguration
                         (ConfigurationUserLevel.None);
 
-            config.AppSettings.Settings.Clear();
+            config.AppSettings.Settings.Remove(CommonConstants.SMS_FILE_NAME);
+            //config.AppSettings.Settings.Clear();
 
             // Add an Application Setting.
             config.AppSettings.Settings.Add(CommonConstants.SMS_FILE_NAME, textBoxFileName.Text);

@@ -18,7 +18,8 @@ namespace SMSSender
 
             SalesPicker sp = new SalesPicker();
             sp.WorkbookPath = args[0];
-            sp.SendMethod = CommonConstants.SMS_MAS_MENSAJES;
+            sp.SendMethod = CommonConstants.SMS_LOCAL;
+            //sp.SendMethod = CommonConstants.SMS_MAS_MENSAJES;
             sp.RetrieveConfiguration();
             sp.RetrieveSales();
             sp.SendSMS();

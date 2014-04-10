@@ -59,7 +59,7 @@ namespace SMSSender
 
         public void DoLogin(string userName, string password)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(string.Format("Login - {0}: {1}", userName, password));
         }
     }
 }
