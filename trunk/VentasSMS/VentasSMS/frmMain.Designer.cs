@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.notifyIconSMS = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.startStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.telefonosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +44,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timerSMS = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -58,7 +58,6 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.startStopToolStripMenuItem,
             this.scheduleToolStripMenuItem,
             this.toolStripSeparator2,
             this.telefonosToolStripMenuItem,
@@ -66,13 +65,7 @@
             this.toolStripSeparator1,
             this.salirToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 126);
-            // 
-            // startStopToolStripMenuItem
-            // 
-            this.startStopToolStripMenuItem.Name = "startStopToolStripMenuItem";
-            this.startStopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.startStopToolStripMenuItem.Text = "Iniciar / Detener";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 104);
             // 
             // scheduleToolStripMenuItem
             // 
@@ -98,6 +91,7 @@
             this.enviarSMSToolStripMenuItem.Name = "enviarSMSToolStripMenuItem";
             this.enviarSMSToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.enviarSMSToolStripMenuItem.Text = "Enviar S&MS";
+            this.enviarSMSToolStripMenuItem.Click += new System.EventHandler(this.enviarSMSToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -164,6 +158,12 @@
             this.timer1.Interval = 2000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // timerSMS
+            // 
+            this.timerSMS.Enabled = true;
+            this.timerSMS.Interval = 60000;
+            this.timerSMS.Tick += new System.EventHandler(this.timerSMS_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -183,6 +183,7 @@
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SMS a Ventas";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -201,13 +202,13 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem telefonosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem startStopToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timerSMS;
     }
 }
 

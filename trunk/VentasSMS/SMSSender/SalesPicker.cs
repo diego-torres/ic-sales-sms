@@ -10,15 +10,16 @@ using System.Globalization;
 
 namespace SMSSender
 {
-    class SalesPicker
+    public class SalesPicker
     {
-        private string workbookPath;
+        private string workbookPath, sendMethod, userName, password;
         private IList<Empresa> empresas;
-        private string sendMethod;
         private ISendable sendable;
         private AdminPaqImpl api;
 
         public string WorkbookPath { get { return workbookPath; } set { workbookPath = value; } }
+        public string UserName { get { return userName; } set { userName = value; } }
+        public string Password { get { return password; } set { password = value; } }
         public string SendMethod { get { return sendMethod; }
             set
             {
@@ -26,7 +27,7 @@ namespace SMSSender
                 {
                     case CommonConstants.SMS_MAS_MENSAJES:
                         sendable = new MasMensajes();
-                        sendable.DoLogin("user", "password");
+                        sendable.DoLogin(userName, password);
                         break;
                     case CommonConstants.SMS_LOCAL:
                         sendable = new LocalSMS();
@@ -261,7 +262,7 @@ namespace SMSSender
 
 
                     sms = string.Format("{0}. {1}", semanal, tendencia);
-                    byeSMS(agente.Phone.PhoneNumber, sms);
+                    byeSMS(agente.Phone.PhoneNumber, sms, userName, password);
                 }
 
             }
@@ -288,15 +289,16 @@ namespace SMSSender
         { 
             foreach(string boss in empresa.TelefonosDirectores)
             {
-                byeSMS(boss, sms);
+                byeSMS(boss, sms, userName, password);
             }
         }
 
-        private void byeSMS(string to, string msg)
+        private void byeSMS(string to, string msg, string user, string pwd)
         {
             Sms sms = new Sms();
             sms.To = to;
             sms.Message = msg;
+            sendable.DoLogin(user, pwd);
             sendable.SendSMS(sms);
         }
 

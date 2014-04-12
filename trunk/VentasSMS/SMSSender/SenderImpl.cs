@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using CommonAdminPaq;
 
 namespace SMSSender
 {
@@ -34,12 +35,9 @@ namespace SMSSender
             {
                 i++;
                 sLine = objReader.ReadLine();
-                if (sLine != null)
-                    Console.WriteLine("{0}:{1}", i, sLine);
+                if (sLine != null && sLine.Contains("ERROR"))
+                    ErrLogger.Log(sLine);
             }
-            //Console.ReadLine();
-
-            Console.WriteLine(urlRequest);
         }
 
         public void DoLogin(string userName, string password)
