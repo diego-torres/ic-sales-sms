@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SMSSender
 {
-    class CommonConstants
+    public class CommonConstants
     {
         public const string SMS_MAS_MENSAJES = "MAS_MENSAJES";
         public const string SMS_LOCAL = "SMS_LOCAL";

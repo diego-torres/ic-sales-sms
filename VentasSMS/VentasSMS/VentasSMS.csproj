@@ -88,7 +88,9 @@
     <EmbeddedResource Include="ScheduleConfig.resx">
       <DependentUpon>ScheduleConfig.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -132,6 +134,10 @@
     <ProjectReference Include="..\CommonAdminPaq\CommonAdminPaq.csproj">
       <Project>{FBFE32B7-F433-430E-9DBC-60CAC18725D2}</Project>
       <Name>CommonAdminPaq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SMSSender\SMSSender.csproj">
+      <Project>{A9FDC91F-4D15-460C-9E84-5E7CBEAF4428}</Project>
+      <Name>SMSSender</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
