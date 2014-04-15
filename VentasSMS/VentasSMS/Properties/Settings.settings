@@ -1,7 +1,60 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VentasSMS.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="smsWorkbook" Type="System.String" Scope="User">
+      <Value Profile="(Default)">~\SMS_Ventas.xlsx</Value>
+    </Setting>
+    <Setting Name="todSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">08:00;16:00</Value>
+    </Setting>
+    <Setting Name="monSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">true</Value>
+    </Setting>
+    <Setting Name="tueSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">true</Value>
+    </Setting>
+    <Setting Name="wedSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">true</Value>
+    </Setting>
+    <Setting Name="thuSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">true</Value>
+    </Setting>
+    <Setting Name="friSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">true</Value>
+    </Setting>
+    <Setting Name="satSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">true</Value>
+    </Setting>
+    <Setting Name="sunSchedule" Type="System.String" Scope="User">
+      <Value Profile="(Default)">true</Value>
+    </Setting>
+    <Setting Name="user" Type="System.String" Scope="User">
+      <Value Profile="(Default)">a.user</Value>
+    </Setting>
+    <Setting Name="password" Type="System.String" Scope="User">
+      <Value Profile="(Default)">secret</Value>
+    </Setting>
+    <Setting Name="monExecuted" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="tueExecuted" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="wedExecuted" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="thuExecuted" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="friExecuted" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="satExecuted" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="sunExecuted" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
 </SettingsFile>

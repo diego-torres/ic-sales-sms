@@ -11,7 +11,8 @@ using System.Configuration;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using CommonAdminPaq.dto;
-using CommonAdminPaq; 
+using CommonAdminPaq;
+using VentasSMS.Properties; 
 
 namespace VentasSMS
 {
@@ -127,23 +128,13 @@ namespace VentasSMS
 
         private void saveSettings()
         {
+            Settings set = Settings.Default;
             toolStripProgressBar1.PerformStep(); // 90
-            // Open App.Config of executable
-            System.Configuration.Configuration config =
-             ConfigurationManager.OpenExeConfiguration
-                        (ConfigurationUserLevel.None);
 
-            config.AppSettings.Settings.Remove(CommonConstants.SMS_FILE_NAME);
-            //config.AppSettings.Settings.Clear();
+            set.smsWorkbook = textBoxFileName.Text;
 
-            // Add an Application Setting.
-            config.AppSettings.Settings.Add(CommonConstants.SMS_FILE_NAME, textBoxFileName.Text);
-
-            // Save the changes in App.config file.
-            config.Save(ConfigurationSaveMode.Modified);
-
-            // Force a reload of a changed section.
-            ConfigurationManager.RefreshSection("appSettings");
+            set.Save();
+            set.Reload();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

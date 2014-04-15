@@ -231,7 +231,6 @@ namespace SMSSender
 
             foreach(Empresa empresa in empresas)
             {
-                Console.WriteLine("Retrieving sales for company: [" + empresa.Nombre + "]");
                 api.RetrieveSales(empresa);
             }
         }
