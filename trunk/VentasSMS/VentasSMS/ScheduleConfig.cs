@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Configuration;
+using VentasSMS.Properties;
 
 namespace VentasSMS
 {
@@ -25,37 +26,38 @@ namespace VentasSMS
         private Schedule configuredSchedule()
         {
             Schedule result = new Schedule();
+            Settings set = Settings.Default;
             string sTodSchedule, sMonEnabled, sTueEnabled, sWedEnabled, sThuEnabled, sFriEnabled, 
                 sSatEnabled, sSunEnabled, user, password;
 
-            sTodSchedule = ConfigurationManager.AppSettings[CommonConstants.TOD_SCHEDULE];
+            sTodSchedule = set.todSchedule;
 
             result.Horarios = sTodSchedule.Split(';');
             Array.Sort(result.Horarios);
 
-            sMonEnabled = ConfigurationManager.AppSettings[CommonConstants.MON_ENABLED];
+            sMonEnabled = set.monSchedule;
             result.IsMonday = bool.Parse(sMonEnabled);
 
-            sTueEnabled = ConfigurationManager.AppSettings[CommonConstants.TUE_ENABLED];
+            sTueEnabled = set.tueSchedule;
             result.IsTuesday = bool.Parse(sTueEnabled);
 
-            sWedEnabled = ConfigurationManager.AppSettings[CommonConstants.WED_ENABLED];
+            sWedEnabled = set.wedSchedule;
             result.IsWednesday = bool.Parse(sWedEnabled);
 
-            sThuEnabled = ConfigurationManager.AppSettings[CommonConstants.THU_ENABLED];
+            sThuEnabled = set.thuSchedule;
             result.IsThursday = bool.Parse(sThuEnabled);
 
-            sFriEnabled = ConfigurationManager.AppSettings[CommonConstants.FRI_ENABLED];
+            sFriEnabled = set.friSchedule;
             result.IsFriday = bool.Parse(sFriEnabled);
 
-            sSatEnabled = ConfigurationManager.AppSettings[CommonConstants.SAT_ENABLED];
+            sSatEnabled = set.satSchedule;
             result.IsSaturday = bool.Parse(sSatEnabled);
 
-            sSunEnabled = ConfigurationManager.AppSettings[CommonConstants.SUN_ENABLED];
+            sSunEnabled = set.sunSchedule;
             result.IsSunday = bool.Parse(sSunEnabled);
 
-            user = ConfigurationManager.AppSettings[CommonConstants.USER];
-            password = ConfigurationManager.AppSettings[CommonConstants.PASSWORD];
+            user = set.user;
+            password = set.password;
 
             result.User = user;
             result.Password = password;
@@ -156,24 +158,7 @@ namespace VentasSMS
 
         private void saveSettings()
         {
-            // Open App.Config of executable
-            System.Configuration.Configuration config =
-             ConfigurationManager.OpenExeConfiguration
-                        (ConfigurationUserLevel.None);
-
-            config.AppSettings.Settings.Remove(CommonConstants.TOD_SCHEDULE);
-
-            config.AppSettings.Settings.Remove(CommonConstants.MON_ENABLED);
-            config.AppSettings.Settings.Remove(CommonConstants.TUE_ENABLED);
-            config.AppSettings.Settings.Remove(CommonConstants.WED_ENABLED);
-            config.AppSettings.Settings.Remove(CommonConstants.THU_ENABLED);
-            config.AppSettings.Settings.Remove(CommonConstants.FRI_ENABLED);
-
-            config.AppSettings.Settings.Remove(CommonConstants.SAT_ENABLED);
-            config.AppSettings.Settings.Remove(CommonConstants.SUN_ENABLED);
-
-            config.AppSettings.Settings.Remove(CommonConstants.USER);
-            config.AppSettings.Settings.Remove(CommonConstants.PASSWORD);
+            Settings set = Settings.Default;
             
             // Add an Application Setting.
             string todSchedule = "";
@@ -183,25 +168,24 @@ namespace VentasSMS
             }
             todSchedule = todSchedule.Substring(0, todSchedule.Length - 1);
 
-            config.AppSettings.Settings.Add(CommonConstants.TOD_SCHEDULE, todSchedule);
+            set.todSchedule = todSchedule;
 
-            config.AppSettings.Settings.Add(CommonConstants.MON_ENABLED, this.checkBoxMon.Checked.ToString());
-            config.AppSettings.Settings.Add(CommonConstants.TUE_ENABLED, this.checkBoxTue.Checked.ToString());
-            config.AppSettings.Settings.Add(CommonConstants.WED_ENABLED, this.checkBoxWed.Checked.ToString());
-            config.AppSettings.Settings.Add(CommonConstants.THU_ENABLED, this.checkBoxThu.Checked.ToString());
-            config.AppSettings.Settings.Add(CommonConstants.FRI_ENABLED, this.checkBoxFri.Checked.ToString());
+            set.monSchedule = this.checkBoxMon.Checked.ToString();
+            set.tueSchedule = this.checkBoxTue.Checked.ToString();
+            set.wedSchedule = this.checkBoxWed.Checked.ToString();
+            set.thuSchedule = this.checkBoxThu.Checked.ToString();
+            set.friSchedule = this.checkBoxFri.Checked.ToString();
 
-            config.AppSettings.Settings.Add(CommonConstants.SAT_ENABLED, this.checkBoxSat.Checked.ToString());
-            config.AppSettings.Settings.Add(CommonConstants.SUN_ENABLED, this.checkBoxSun.Checked.ToString());
+            set.satSchedule = this.checkBoxSat.Checked.ToString();
+            set.sunSchedule = this.checkBoxSun.Checked.ToString();
 
-            config.AppSettings.Settings.Add(CommonConstants.USER, this.textBoxUser.Text);
-            config.AppSettings.Settings.Add(CommonConstants.PASSWORD, this.textBoxPassword.Text);
+            set.user = this.textBoxUser.Text;
+            set.password = this.textBoxPassword.Text;
 
             // Save the changes in App.config file.
-            config.Save(ConfigurationSaveMode.Modified);
-
-            // Force a reload of a changed section.
-            ConfigurationManager.RefreshSection("appSettings");
+            set.Save();
+            set.Reload();
+            
         }
 
         private void ScheduleConfig_FormClosing(object sender, FormClosingEventArgs e)

@@ -10,6 +10,7 @@ using System.Configuration;
 using System.IO;
 using CommonAdminPaq;
 using SMSSender;
+using VentasSMS.Properties;
 
 namespace VentasSMS
 {
@@ -64,7 +65,9 @@ namespace VentasSMS
 
         private string configuredFilePath()
         {
-            string configFilePath = ConfigurationManager.AppSettings[CommonConstants.SMS_FILE_NAME];
+            Settings set = Settings.Default;
+
+            string configFilePath = set.smsWorkbook;
             string myDocs = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             return configFilePath.Replace("~", myDocs);
         }
@@ -101,65 +104,51 @@ namespace VentasSMS
 
         private void resetWeek()
         {
+            Settings set = Settings.Default;
             DateTime today = DateTime.Today;
             string executionBackup="";
             switch (today.DayOfWeek)
             { 
                 case DayOfWeek.Monday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.MON_EXECUTED];
+                    executionBackup = set.monExecuted;
                     break;
                 case DayOfWeek.Tuesday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.TUE_EXECUTED];
+                    executionBackup = set.tueExecuted;
                     break;
                 case DayOfWeek.Wednesday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.WED_EXECUTED];
+                    executionBackup = set.wedExecuted;
                     break;
                 case DayOfWeek.Thursday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.THU_EXECUTED];
+                    executionBackup = set.thuExecuted;
                     break;
                 case DayOfWeek.Friday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.FRI_EXECUTED];
+                    executionBackup = set.friExecuted;
                     break;
                 case DayOfWeek.Saturday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.SAT_EXECUTED];
+                    executionBackup = set.satExecuted;
                     break;
                 case DayOfWeek.Sunday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.SUN_EXECUTED];
+                    executionBackup = set.sunExecuted;
                     break;
             }
 
-            // Open App.Config of executable
-            System.Configuration.Configuration config =
-             ConfigurationManager.OpenExeConfiguration
-                        (ConfigurationUserLevel.None);
+            set.monExecuted = today.DayOfWeek == DayOfWeek.Monday ? executionBackup : "";
+            set.tueExecuted = today.DayOfWeek == DayOfWeek.Tuesday ? executionBackup : "";
+            set.wedExecuted = today.DayOfWeek == DayOfWeek.Wednesday ? executionBackup : "";
+            set.thuExecuted = today.DayOfWeek == DayOfWeek.Thursday ? executionBackup : "";
+            set.friExecuted = today.DayOfWeek == DayOfWeek.Friday ? executionBackup : "";
+            set.satExecuted = today.DayOfWeek == DayOfWeek.Saturday ? executionBackup : "";
+            set.sunExecuted = today.DayOfWeek == DayOfWeek.Sunday ? executionBackup : "";
 
-            config.AppSettings.Settings.Remove(CommonConstants.MON_EXECUTED);
-            config.AppSettings.Settings.Remove(CommonConstants.TUE_EXECUTED);
-            config.AppSettings.Settings.Remove(CommonConstants.WED_EXECUTED);
-            config.AppSettings.Settings.Remove(CommonConstants.THU_EXECUTED);
-            config.AppSettings.Settings.Remove(CommonConstants.FRI_EXECUTED);
-            config.AppSettings.Settings.Remove(CommonConstants.SAT_EXECUTED);
-            config.AppSettings.Settings.Remove(CommonConstants.SUN_EXECUTED);
-
-
-            config.AppSettings.Settings.Add(CommonConstants.MON_EXECUTED, today.DayOfWeek==DayOfWeek.Monday ? executionBackup:"");
-            config.AppSettings.Settings.Add(CommonConstants.TUE_EXECUTED, today.DayOfWeek == DayOfWeek.Tuesday ? executionBackup : "");
-            config.AppSettings.Settings.Add(CommonConstants.WED_EXECUTED, today.DayOfWeek == DayOfWeek.Wednesday ? executionBackup : "");
-            config.AppSettings.Settings.Add(CommonConstants.THU_EXECUTED, today.DayOfWeek == DayOfWeek.Thursday ? executionBackup : "");
-            config.AppSettings.Settings.Add(CommonConstants.FRI_EXECUTED, today.DayOfWeek == DayOfWeek.Friday ? executionBackup : "");
-            config.AppSettings.Settings.Add(CommonConstants.SAT_EXECUTED, today.DayOfWeek == DayOfWeek.Saturday ? executionBackup : "");
-            config.AppSettings.Settings.Add(CommonConstants.SUN_EXECUTED, today.DayOfWeek == DayOfWeek.Sunday ? executionBackup : "");
-
-            // Save the changes in App.config file.
-            config.Save(ConfigurationSaveMode.Modified);
+            set.Save();
 
             // Force a reload of a changed section.
-            ConfigurationManager.RefreshSection("appSettings");
-
+            set.Reload();
         }
 
         private bool HourExecuted (string current)
         {
+            Settings set = Settings.Default;
             DateTime today = DateTime.Today;
             string sExecuted = "";
             string[] executed;
@@ -168,25 +157,25 @@ namespace VentasSMS
             switch (today.DayOfWeek)
             {
                 case DayOfWeek.Monday:
-                    sExecuted = ConfigurationManager.AppSettings[CommonConstants.MON_EXECUTED];
+                    sExecuted = set.monExecuted;
                     break;
                 case DayOfWeek.Tuesday:
-                    sExecuted = ConfigurationManager.AppSettings[CommonConstants.TUE_EXECUTED];
+                    sExecuted = set.tueExecuted;
                     break;
                 case DayOfWeek.Wednesday:
-                    sExecuted = ConfigurationManager.AppSettings[CommonConstants.WED_EXECUTED];
+                    sExecuted = set.wedExecuted;
                     break;
                 case DayOfWeek.Thursday:
-                    sExecuted = ConfigurationManager.AppSettings[CommonConstants.THU_EXECUTED];
+                    sExecuted = set.thuExecuted;
                     break;
                 case DayOfWeek.Friday:
-                    sExecuted = ConfigurationManager.AppSettings[CommonConstants.FRI_EXECUTED];
+                    sExecuted = set.friExecuted;
                     break;
                 case DayOfWeek.Saturday:
-                    sExecuted = ConfigurationManager.AppSettings[CommonConstants.SAT_EXECUTED];
+                    sExecuted = set.satExecuted;
                     break;
                 case DayOfWeek.Sunday:
-                    sExecuted = ConfigurationManager.AppSettings[CommonConstants.SUN_EXECUTED];
+                    sExecuted = set.sunExecuted;
                     break;
             }
             executed = sExecuted.Split(';');
@@ -196,6 +185,7 @@ namespace VentasSMS
 
         private void addExecutionToList(string sTime)
         {
+            Settings set = Settings.Default;
             DateTime today = DateTime.Today;
             string executionBackup = "";
             // Open App.Config of executable
@@ -205,47 +195,40 @@ namespace VentasSMS
             switch (today.DayOfWeek)
             {
                 case DayOfWeek.Monday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.MON_EXECUTED];
-                    config.AppSettings.Settings.Remove(CommonConstants.MON_EXECUTED);
-                    config.AppSettings.Settings.Add(CommonConstants.MON_EXECUTED, executionBackup.Equals("") ? sTime: executionBackup + ";" + sTime);
+                    executionBackup = set.monExecuted;
+                    set.monExecuted = executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime;
                     break;
                 case DayOfWeek.Tuesday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.TUE_EXECUTED];
-                    config.AppSettings.Settings.Remove(CommonConstants.TUE_EXECUTED);
-                    config.AppSettings.Settings.Add(CommonConstants.TUE_EXECUTED, executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime);
+                    executionBackup = set.tueExecuted;
+                    set.tueExecuted = executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime;
                     break;
                 case DayOfWeek.Wednesday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.WED_EXECUTED];
-                    config.AppSettings.Settings.Remove(CommonConstants.WED_EXECUTED);
-                    config.AppSettings.Settings.Add(CommonConstants.WED_EXECUTED, executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime);
+                    executionBackup = set.wedExecuted;
+                    set.wedExecuted = executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime;
                     break;
                 case DayOfWeek.Thursday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.THU_EXECUTED];
-                    config.AppSettings.Settings.Remove(CommonConstants.THU_EXECUTED);
-                    config.AppSettings.Settings.Add(CommonConstants.THU_EXECUTED, executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime);
+                    executionBackup = set.thuExecuted;
+                    set.thuExecuted = executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime;
                     break;
                 case DayOfWeek.Friday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.FRI_EXECUTED];
-                    config.AppSettings.Settings.Remove(CommonConstants.FRI_EXECUTED);
-                    config.AppSettings.Settings.Add(CommonConstants.FRI_EXECUTED, executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime);
+                    executionBackup = set.friExecuted;
+                    set.friExecuted = executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime;
                     break;
                 case DayOfWeek.Saturday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.SAT_EXECUTED];
-                    config.AppSettings.Settings.Remove(CommonConstants.SAT_EXECUTED);
-                    config.AppSettings.Settings.Add(CommonConstants.SAT_EXECUTED, executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime);
+                    executionBackup = set.satExecuted;
+                    set.satExecuted = executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime;
                     break;
                 case DayOfWeek.Sunday:
-                    executionBackup = ConfigurationManager.AppSettings[CommonConstants.SUN_EXECUTED];
-                    config.AppSettings.Settings.Remove(CommonConstants.SUN_EXECUTED);
-                    config.AppSettings.Settings.Add(CommonConstants.SUN_EXECUTED, executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime);
+                    executionBackup = set.sunExecuted;
+                    set.sunExecuted = executionBackup.Equals("") ? sTime : executionBackup + ";" + sTime;
                     break;
             }
 
             // Save the changes in App.config file.
-            config.Save(ConfigurationSaveMode.Modified);
+            set.Save();
 
             // Force a reload of a changed section.
-            ConfigurationManager.RefreshSection("appSettings");
+            set.Reload();
 
         }
 
@@ -270,46 +253,54 @@ namespace VentasSMS
             }
             else
             {
-                SalesPicker sp = new SalesPicker();
-                sp.WorkbookPath = configFilePath;
-                sp.UserName = ConfigurationManager.AppSettings[CommonConstants.USER];
-                sp.Password = ConfigurationManager.AppSettings[CommonConstants.PASSWORD];
-                //sp.SendMethod = SMSSender.CommonConstants.SMS_LOCAL;
-                sp.SendMethod = SMSSender.CommonConstants.SMS_MAS_MENSAJES;
-                
-                sp.RetrieveConfiguration();
-                sp.RetrieveSales();
-                sp.SendSMS();
-                sp.SendBossSMS();
+                try {
+                    Settings set = Settings.Default;
+                    SalesPicker sp = new SalesPicker();
+                    sp.WorkbookPath = configFilePath;
+                    sp.UserName = set.user;
+                    sp.Password = set.password;
+                    //sp.SendMethod = SMSSender.CommonConstants.SMS_LOCAL;
+                    sp.SendMethod = SMSSender.CommonConstants.SMS_MAS_MENSAJES;
+
+                    sp.RetrieveConfiguration();
+                    sp.RetrieveSales();
+                    sp.SendSMS();
+                    sp.SendBossSMS();
+                }catch(Exception e){
+                    ErrLogger.Log(e.Message);
+                    ErrLogger.Log(e.StackTrace);
+                }
             }
         }
 
         private bool DayEnabled()
         {
+            Settings set = Settings.Default;
             DateTime today = DateTime.Today;
             
             switch (today.DayOfWeek)
             {
                 case DayOfWeek.Monday:
-                    return bool.Parse(ConfigurationManager.AppSettings[CommonConstants.MON_ENABLED]);
+                    return bool.Parse(set.monSchedule);
                 case DayOfWeek.Tuesday:
-                    return bool.Parse(ConfigurationManager.AppSettings[CommonConstants.TUE_ENABLED]);
+                    return bool.Parse(set.tueSchedule);
                 case DayOfWeek.Wednesday:
-                    return bool.Parse(ConfigurationManager.AppSettings[CommonConstants.WED_ENABLED]);
+                    return bool.Parse(set.wedSchedule);
                 case DayOfWeek.Thursday:
-                    return bool.Parse(ConfigurationManager.AppSettings[CommonConstants.THU_ENABLED]);
+                    return bool.Parse(set.thuSchedule);
                 case DayOfWeek.Friday:
-                    return bool.Parse(ConfigurationManager.AppSettings[CommonConstants.FRI_ENABLED]);
+                    return bool.Parse(set.friSchedule);
                 case DayOfWeek.Saturday:
-                    return bool.Parse(ConfigurationManager.AppSettings[CommonConstants.SAT_ENABLED]);
+                    return bool.Parse(set.satSchedule);
                 case DayOfWeek.Sunday:
-                    return bool.Parse(ConfigurationManager.AppSettings[CommonConstants.SUN_ENABLED]);
+                    return bool.Parse(set.sunSchedule);
             }
             return false;
         }
 
         private void timerSMS_Tick(object sender, EventArgs e)
         {
+            Settings set = Settings.Default;
             timerSMS.Stop();
             if (!DayEnabled()) 
             {
@@ -319,7 +310,7 @@ namespace VentasSMS
             
 
             resetWeek();
-            string sScheduled = ConfigurationManager.AppSettings[CommonConstants.TOD_SCHEDULE];
+            string sScheduled = set.todSchedule;
             string[] scheduled = sScheduled.Split(';');
             string current = DateTime.Now.ToString("HH:mm");
             bool sent = false;
