@@ -51,7 +51,11 @@ namespace SMSSender
 
         public void SendSMS(Sms sms)
         {
-            Console.WriteLine(string.Format("{0}: {1}", sms.To, sms.Message));
+            string fileName = @"c:\temp\sms_" + sms.To + ".txt";
+            using (StreamWriter w = File.AppendText(fileName))
+            {
+                w.WriteLine(sms.Message);
+            }
         }
 
 

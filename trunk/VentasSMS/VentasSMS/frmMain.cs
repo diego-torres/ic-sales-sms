@@ -243,11 +243,53 @@ namespace VentasSMS
             return sTolerance.CompareTo(current) >= 0;
         }
 
+        private void localFiles()
+        {
+            string configFilePath = configuredFilePath();
+            ConfigValidator cv = new ConfigValidator();
+            cv.API = api;
+            cv.Ruta = configFilePath;
+
+            if ("".Equals(configFilePath.Trim()) || !File.Exists(configFilePath) || !cv.ValidateConfiguration())
+            {
+                openConfigForm(configFilePath);
+            }
+            else
+            {
+                try
+                {
+                    Settings set = Settings.Default;
+                    SalesPicker sp = new SalesPicker();
+                    sp.WorkbookPath = configFilePath;
+                    sp.UserName = set.user;
+                    sp.Password = set.password;
+                    sp.SendMethod = SMSSender.CommonConstants.SMS_LOCAL;
+                    //sp.SendMethod = SMSSender.CommonConstants.SMS_MAS_MENSAJES;
+
+                    sp.RetrieveConfiguration();
+                    sp.RetrieveSales();
+                    sp.SendSMS();
+                    sp.SendBossSMS();
+                }
+                catch (Exception e)
+                {
+                    ErrLogger.Log(e.Message);
+                    ErrLogger.Log(e.StackTrace);
+                }
+
+                MessageBox.Show("Archivos locales de simulación de SMS generados exitosamente.", "Simulación de SMS Local", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+        }
+
         private void sendSMS()
         {
             string configFilePath = configuredFilePath();
-
-            if ("".Equals(configFilePath.Trim()) || !File.Exists(configFilePath))
+            ConfigValidator cv = new ConfigValidator();
+            cv.API = api;
+            cv.Ruta = configFilePath;
+            
+            if ("".Equals(configFilePath.Trim()) || !File.Exists(configFilePath)||!cv.ValidateConfiguration())
             {
                 openConfigForm(configFilePath);
             }
@@ -342,6 +384,11 @@ namespace VentasSMS
                 + "\n ¿Está usted seguro que desea continuar con esta acción?", "¿Desea Salir?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (drClose == DialogResult.No)
                 e.Cancel = true;
+        }
+
+        private void pruebaLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            localFiles();
         }
     }
 }
