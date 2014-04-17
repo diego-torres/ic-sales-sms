@@ -59,11 +59,10 @@ namespace CommonAdminPaq
             DateTime today = DateTime.Today;
             int weekStartDelta = 2 - (int)today.DayOfWeek;
             DateTime weekStart = today.AddDays(weekStartDelta);
-            DateTime weeksAgo = weekStart.AddDays(-21);
+            DateTime weeksAgo = weekStart.AddDays(-22);
 
             DateTime saleDate = weeksAgo;
 
-            //KeyValuePair<string, long> connections = new KeyValuePair<string,long>();
             Dictionary<string, int> connections = new Dictionary<string, int>();
             connections.Add("documents", AdminPaqLib.dbLogIn("", empresa.Ruta));
             connections.Add("concepts", AdminPaqLib.dbLogIn("", empresa.Ruta));
@@ -76,6 +75,53 @@ namespace CommonAdminPaq
 
             ReleaseConnections(connections);
 
+        }
+
+        public bool CodigoDocoValido(string codigoDoco, string rutaEmpresa)
+        {
+            Dictionary<string, int> connections = new Dictionary<string, int>();
+            connections.Add("concepts", AdminPaqLib.dbLogIn("", rutaEmpresa));
+
+            long conceptId = ConceptId(int.Parse(codigoDoco), connections);
+            ReleaseConnections(connections);
+            return conceptId!=0;
+        }
+
+        public int IdAgente(string codigoAgente, string rutaEmpresa)
+        {
+
+            int dbResponse, agentId = 0, fqResult;
+            StringBuilder sbDBAgente = new StringBuilder(31);
+            int connection = AdminPaqLib.dbLogIn("", rutaEmpresa);
+
+            if (connection == 0)
+            {
+                ErrLogger.Log("Connection not allowed in adminpaq for concepts");
+                return 0;
+            }
+
+
+            dbResponse = AdminPaqLib.dbGetTopNoLock(connection, "MGW10001", "PRIMARYKEY");
+            if (dbResponse == 4)
+            {
+                ErrLogger.Log("La ruta de la empresa es incorrecta.");
+                return 0;
+            }
+
+            while (dbResponse == 0)
+            {
+                fqResult = AdminPaqLib.dbFieldChar(connection, "MGW10001", 2, sbDBAgente, 31);
+                if (sbDBAgente.ToString().Substring(0,30).Trim().ToUpper().Equals(codigoAgente.Trim().ToUpper()))
+                {
+                    fqResult = AdminPaqLib.dbFieldLong(connection, "MGW10001", 1, ref agentId);
+                    break;
+                }
+
+                dbResponse = AdminPaqLib.dbSkip(connection, "MGW10001", "PRIMARYKEY", 1);
+            }
+
+            AdminPaqLib.dbLogOut(connection);
+            return agentId;
         }
 
         private void ReleaseConnections(Dictionary<string, int> connections)
@@ -92,6 +138,40 @@ namespace CommonAdminPaq
             int weekStartDelta = 2 - (int)today.DayOfWeek;
             DateTime weekStart = today.AddDays(weekStartDelta);
             return date.CompareTo(weekStart) >= 0;
+        }
+
+        private long ConceptId(int conceptCode, Dictionary<string, int> connections)
+        {
+            int connection, dbResponse, conceptId=0, fqResult=0, dbCode=0;
+            bool connected = connections.TryGetValue("concepts", out connection);
+
+            if (!connected || connection == 0)
+            {
+                ErrLogger.Log("Connection not allowed in adminpaq for concepts");
+                return 0;
+            }
+
+            dbResponse = AdminPaqLib.dbGetTopNoLock(connection, "MGW10006", "PRIMARYKEY");
+            if (dbResponse == 4)
+            {
+                ErrLogger.Log("La ruta de la empresa es incorrecta.");
+                return 0;
+            }
+
+            while(dbResponse == 0)
+            {
+                fqResult = AdminPaqLib.dbFieldLong(connection, "MGW10006", 2, ref dbCode);
+                if (dbCode == conceptCode)
+                {
+                    fqResult = AdminPaqLib.dbFieldLong(connection, "MGW10006", 1, ref conceptId);
+                    return conceptId;
+                }
+                    
+
+                dbResponse = AdminPaqLib.dbSkip(connection, "MGW10006", "PRIMARYKEY", 1);
+            }
+
+            return 0;
         }
 
         private long conceptCode(int conceptId, Dictionary<string, int> connections)
@@ -111,6 +191,12 @@ namespace CommonAdminPaq
             key = key + conceptId.ToString();
 
             dbResponse = AdminPaqLib.dbGetNoLock(connection, "MGW10006", "PRIMARYKEY", key);
+            if (dbResponse == 4)
+            {
+                ErrLogger.Log("La ruta de la empresa es incorrecta.");
+                return 0;
+            }
+
             if (dbResponse == 0)
             {
                 int fqResult = AdminPaqLib.dbFieldChar(connection, "MGW10006", 2, sbConceptCode, 30);
@@ -150,7 +236,6 @@ namespace CommonAdminPaq
 
         private void RetrieveSales(DateTime date, Empresa empresa, Dictionary<string, int> connections) 
         {
-
             string filterDate;
             int cancelled, returned, conceptId, agentId, currencyId, connection, dbResponse;
             double changeValue, sold;
@@ -168,6 +253,12 @@ namespace CommonAdminPaq
 
             filterDate = date.ToString("yyyyMMdd");
             dbResponse = AdminPaqLib.dbGetNoLock(connection, "MGW10008", "CFECHA", filterDate);
+            if (dbResponse == 4)
+            {
+                ErrLogger.Log("La ruta de la empresa es incorrecta.");
+                return;
+            }
+
             while (dbResponse == 0)
             {
                 int fqResult = 0;

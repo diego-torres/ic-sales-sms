@@ -45,6 +45,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timerSMS = new System.Windows.Forms.Timer(this.components);
+            this.pruebaLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -62,10 +63,11 @@
             this.toolStripSeparator2,
             this.telefonosToolStripMenuItem,
             this.enviarSMSToolStripMenuItem,
+            this.pruebaLocalToolStripMenuItem,
             this.toolStripSeparator1,
             this.salirToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 104);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 148);
             // 
             // scheduleToolStripMenuItem
             // 
@@ -164,6 +166,13 @@
             this.timerSMS.Interval = 60000;
             this.timerSMS.Tick += new System.EventHandler(this.timerSMS_Tick);
             // 
+            // pruebaLocalToolStripMenuItem
+            // 
+            this.pruebaLocalToolStripMenuItem.Name = "pruebaLocalToolStripMenuItem";
+            this.pruebaLocalToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.pruebaLocalToolStripMenuItem.Text = "&Prueba Local";
+            this.pruebaLocalToolStripMenuItem.Click += new System.EventHandler(this.pruebaLocalToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -209,6 +218,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timerSMS;
+        private System.Windows.Forms.ToolStripMenuItem pruebaLocalToolStripMenuItem;
     }
 }
 
