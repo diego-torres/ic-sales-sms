@@ -36,6 +36,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.telefonosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enviarSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pruebaLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -45,7 +46,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timerSMS = new System.Windows.Forms.Timer(this.components);
-            this.pruebaLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.auditoriaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -64,46 +65,54 @@
             this.telefonosToolStripMenuItem,
             this.enviarSMSToolStripMenuItem,
             this.pruebaLocalToolStripMenuItem,
+            this.auditoriaToolStripMenuItem,
             this.toolStripSeparator1,
             this.salirToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 148);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 170);
             // 
             // scheduleToolStripMenuItem
             // 
             this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
-            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.scheduleToolStripMenuItem.Text = "&Agenda de envío";
             this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(163, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(160, 6);
             // 
             // telefonosToolStripMenuItem
             // 
             this.telefonosToolStripMenuItem.Name = "telefonosToolStripMenuItem";
-            this.telefonosToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.telefonosToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.telefonosToolStripMenuItem.Text = "&Teléfonos";
             this.telefonosToolStripMenuItem.Click += new System.EventHandler(this.telefonosToolStripMenuItem_Click);
             // 
             // enviarSMSToolStripMenuItem
             // 
             this.enviarSMSToolStripMenuItem.Name = "enviarSMSToolStripMenuItem";
-            this.enviarSMSToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.enviarSMSToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.enviarSMSToolStripMenuItem.Text = "Enviar S&MS";
             this.enviarSMSToolStripMenuItem.Click += new System.EventHandler(this.enviarSMSToolStripMenuItem_Click);
+            // 
+            // pruebaLocalToolStripMenuItem
+            // 
+            this.pruebaLocalToolStripMenuItem.Name = "pruebaLocalToolStripMenuItem";
+            this.pruebaLocalToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.pruebaLocalToolStripMenuItem.Text = "&Prueba Local";
+            this.pruebaLocalToolStripMenuItem.Click += new System.EventHandler(this.pruebaLocalToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(163, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.salirToolStripMenuItem.Text = "&Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
@@ -166,12 +175,12 @@
             this.timerSMS.Interval = 60000;
             this.timerSMS.Tick += new System.EventHandler(this.timerSMS_Tick);
             // 
-            // pruebaLocalToolStripMenuItem
+            // auditoriaToolStripMenuItem
             // 
-            this.pruebaLocalToolStripMenuItem.Name = "pruebaLocalToolStripMenuItem";
-            this.pruebaLocalToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.pruebaLocalToolStripMenuItem.Text = "&Prueba Local";
-            this.pruebaLocalToolStripMenuItem.Click += new System.EventHandler(this.pruebaLocalToolStripMenuItem_Click);
+            this.auditoriaToolStripMenuItem.Name = "auditoriaToolStripMenuItem";
+            this.auditoriaToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.auditoriaToolStripMenuItem.Text = "Auditoria";
+            this.auditoriaToolStripMenuItem.Click += new System.EventHandler(this.auditoriaToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -219,6 +228,7 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timerSMS;
         private System.Windows.Forms.ToolStripMenuItem pruebaLocalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem auditoriaToolStripMenuItem;
     }
 }
 

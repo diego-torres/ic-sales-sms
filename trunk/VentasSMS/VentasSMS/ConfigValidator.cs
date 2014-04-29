@@ -45,8 +45,15 @@ namespace VentasSMS
                 } 
                 sheetIdx++;
             }
-
-            if (validated) book.Save();
+            try 
+            {
+                if (validated) book.Save();
+            }
+            catch(Exception e)
+            {
+                ErrLogger.Log("Unable to save changes to phones workbook: " + e.Message.ToString());
+            }
+            
 
             book.Close(SaveChanges: false);
             xlApp.Quit();
