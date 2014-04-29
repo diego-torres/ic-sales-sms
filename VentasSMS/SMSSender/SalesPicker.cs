@@ -255,7 +255,7 @@ namespace SMSSender
                     string semanal = string.Format("Tu meta de venta de esta semana ha sido cumplida en un {0}, faltan {1} por vender",
                         cumplimientoSemanal, faltanteSemanal);
                     if (agente.Phone.CumplimientoSemana >= 1)
-                        semanal = "Felicidades! Haz alcanzado el {0} de ventas en tu meta semanal";
+                        semanal = string.Format("Felicidades! Haz alcanzado el {0} de ventas en tu meta semanal", cumplimientoSemanal);
 
                     string tendencia = string.Format("Tendencia de cumplimiento a 4 semanas {0}", cumplimientoTentencia);
 

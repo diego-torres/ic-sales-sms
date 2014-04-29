@@ -56,10 +56,11 @@ namespace CommonAdminPaq
 
         public void RetrieveSales(Empresa empresa)
         {
-            DateTime today = DateTime.Today;
-            int weekStartDelta = 2 - (int)today.DayOfWeek;
+            //DateTime today = DateTime.Today;
+            DateTime today = new DateTime(2014, 4, 12);
+            int weekStartDelta = 1 - (int)today.DayOfWeek;
             DateTime weekStart = today.AddDays(weekStartDelta);
-            DateTime weeksAgo = weekStart.AddDays(-22);
+            DateTime weeksAgo = weekStart.AddDays(-21);
 
             DateTime saleDate = weeksAgo;
 
@@ -134,8 +135,9 @@ namespace CommonAdminPaq
 
         private bool dateInCurrentWeek(DateTime date)
         {
-            DateTime today = DateTime.Today;
-            int weekStartDelta = 2 - (int)today.DayOfWeek;
+            //DateTime today = DateTime.Today;
+            DateTime today = new DateTime(2014, 4, 12);
+            int weekStartDelta = 1 - (int)today.DayOfWeek;
             DateTime weekStart = today.AddDays(weekStartDelta);
             return date.CompareTo(weekStart) >= 0;
         }
@@ -281,6 +283,7 @@ namespace CommonAdminPaq
                 fqResult = AdminPaqLib.dbFieldChar(connection, "MGW10008", 6, docDate, 9);
                 string sDocDate = docDate.ToString().Substring(0, 8).Trim();
                 if (!filterDate.Equals(sDocDate)) break;
+                
 
                 conceptId = 0;
                 fqResult = AdminPaqLib.dbFieldLong(connection, "MGW10008", 3, ref conceptId);
@@ -320,8 +323,15 @@ namespace CommonAdminPaq
                 sold = 0;
                 fqResult = AdminPaqLib.dbFieldDouble(connection, "MGW10008", 31, ref sold);
 
-                if (isReturn) sold *= -1;
-                if (currencyId != 1) sold *= changeValue;
+                if (isReturn) 
+                {
+                    sold = sold * -1;
+                }
+
+                if (currencyId != 1)
+                {
+                    sold = sold * changeValue;
+                } 
 
                 addSale(agentId, empresa, sold, date);
 
