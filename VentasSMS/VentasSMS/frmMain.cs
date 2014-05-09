@@ -20,7 +20,6 @@ namespace VentasSMS
         public AdminPaqImpl API { get { return api; } }
         private frmConfig fConfig = null;
         private ScheduleConfig sConfig = null;
-        private Auditoria Ventana_Auditoria = null;
 
         public frmMain()
         {
@@ -63,15 +62,6 @@ namespace VentasSMS
             sConfig.LoadConfiguredSchedule();
             sConfig.Show();
         }
-
-        private void openAuditoria()
-        { 
-            if (Ventana_Auditoria==null|| Ventana_Auditoria.IsDisposed)
-            {
-                Ventana_Auditoria = new Auditoria();
-            }
-            Ventana_Auditoria.Show();
-        }   
 
         private string configuredFilePath()
         {
@@ -399,11 +389,6 @@ namespace VentasSMS
         private void pruebaLocalToolStripMenuItem_Click(object sender, EventArgs e)
         {
             localFiles();
-        }
-
-        private void auditoriaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            openAuditoria();
         }
     }
 }
