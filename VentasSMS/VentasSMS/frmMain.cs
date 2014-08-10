@@ -282,6 +282,34 @@ namespace VentasSMS
             }
         }
 
+        private void localFiles(bool bUsePostgresqlConfiguration)
+        {
+            
+            try
+            {
+                Settings set = Settings.Default;
+                SalesPickerPostgresql sp = new SalesPickerPostgresql();
+                
+                sp.UserName = set.user;
+                sp.Password = set.password;
+                sp.SendMethod = SMSSender.CommonConstants.SMS_LOCAL;
+                //sp.SendMethod = SMSSender.CommonConstants.SMS_MAS_MENSAJES;
+
+                sp.RetrieveData();
+                sp.SendSMS();
+                sp.SendBossSMS();
+            }
+            catch (Exception e)
+            {
+                ErrLogger.Log(e.Message);
+                ErrLogger.Log(e.StackTrace);
+            }
+
+            MessageBox.Show("Archivos locales de simulación de SMS generados exitosamente.", "Simulación de SMS Local", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            
+        }
+
         private void sendSMS()
         {
             string configFilePath = configuredFilePath();
@@ -388,7 +416,7 @@ namespace VentasSMS
 
         private void pruebaLocalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            localFiles();
+            localFiles(true);
         }
     }
 }
