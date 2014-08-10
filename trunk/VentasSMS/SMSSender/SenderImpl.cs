@@ -22,7 +22,11 @@ namespace SMSSender
             if (sms.Message.Length > 150)
                 sms.Message = sms.Message.Substring(0, 150);
 
+
+            
             urlRequest = string.Format(REQUEST, API_URL, userName, password, sms.To, Uri.EscapeUriString(sms.Message));
+
+            
             WebRequest request = WebRequest.Create(urlRequest);
 
             Stream oStream = request.GetResponse().GetResponseStream();
