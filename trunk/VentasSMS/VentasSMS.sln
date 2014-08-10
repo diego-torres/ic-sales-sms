@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonAdminPaq", "CommonAdm
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{1309F84B-F7C8-4507-AD0C-29AC27D272AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMS_Sales_Service", "SMS_Sales_Service\SMS_Sales_Service\SMS_Sales_Service.csproj", "{38884271-0C86-445B-A390-DF5BA565ADFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,16 @@ Global
 		{1309F84B-F7C8-4507-AD0C-29AC27D272AA}.Release|Any CPU.ActiveCfg = Release
 		{1309F84B-F7C8-4507-AD0C-29AC27D272AA}.Release|Mixed Platforms.ActiveCfg = Release
 		{1309F84B-F7C8-4507-AD0C-29AC27D272AA}.Release|x86.ActiveCfg = Release
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{38884271-0C86-445B-A390-DF5BA565ADFC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
