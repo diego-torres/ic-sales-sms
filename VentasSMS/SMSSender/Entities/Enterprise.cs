@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SMSSender.Entities
+{
+    public class Enterprise
+    {
+        // FIELD INDEX IN TABLE
+        public const int ID_EMPRESA = 1;
+        public const int NOMBRE_EMPRESA = 2;
+        public const int RUTA_EMPRESA = 3;
+
+        // FIELD PROPERTIES FOR OBJECT
+        private long id;
+        private string nombre, ruta, alias, resultadoSemanal, resultadoMensual;
+        private IList<Seller> agentes;
+        private IList<Director> directors;
+        private IList<long> cSale = new List<long>();
+        private IList<long> cReturn = new List<long>();
+        
+
+        public long Id { get { return id; } set { id = value; } }
+        public string Nombre { get { return nombre; } set { nombre = value; } }
+        public string Ruta { get { return ruta; } set { ruta = value; } }
+        public string Alias { get { return alias; } set { alias = value; } }
+        public IList<Seller> Agentes { get { return agentes; } set { agentes = value; } }
+        public IList<long> CodigosVenta { get { return cSale; } set { cSale = value; } }
+        public IList<long> CodigosDevolucion { get { return cReturn; } set { cReturn = value; } }
+        public IList<Director> Directors { get { return directors; } set { directors = value; } }
+        public string ResultadoSemanal { get { return resultadoSemanal; } set { resultadoSemanal = value; } }
+        public string ResultadoMensual { get { return resultadoMensual; } set { resultadoMensual = value; } }
+    }
+}
