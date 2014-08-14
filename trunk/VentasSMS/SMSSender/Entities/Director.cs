@@ -6,7 +6,7 @@ using CommonAdminPaq.dto;
 
 namespace SMSSender.Entities
 {
-    class Director
+    public class Director
     {
         public long ID;
         public bool SMS = false;

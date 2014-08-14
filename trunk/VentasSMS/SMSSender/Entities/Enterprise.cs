@@ -1,10 +1,10 @@
-﻿using System;
+﻿using SMSSender.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SMSSender.Entities
-{
+
     public class Enterprise
     {
         // FIELD INDEX IN TABLE
@@ -15,8 +15,8 @@ namespace SMSSender.Entities
         // FIELD PROPERTIES FOR OBJECT
         private long id;
         private string nombre, ruta, alias, resultadoSemanal, resultadoMensual;
-        private IList<Seller> agentes;
-        private IList<Director> directors;
+        private List<Seller> agentes = new List<Seller>();
+        private List<Director> directors = new List<Director>();
         private IList<long> cSale = new List<long>();
         private IList<long> cReturn = new List<long>();
         
@@ -25,11 +25,10 @@ namespace SMSSender.Entities
         public string Nombre { get { return nombre; } set { nombre = value; } }
         public string Ruta { get { return ruta; } set { ruta = value; } }
         public string Alias { get { return alias; } set { alias = value; } }
-        public IList<Seller> Agentes { get { return agentes; } set { agentes = value; } }
+        public List<Seller> Agentes { get { return agentes; } set { agentes = value; } }
         public IList<long> CodigosVenta { get { return cSale; } set { cSale = value; } }
         public IList<long> CodigosDevolucion { get { return cReturn; } set { cReturn = value; } }
-        public IList<Director> Directors { get { return directors; } set { directors = value; } }
+        public List<Director> Directors { get { return directors; } set { directors = value; } }
         public string ResultadoSemanal { get { return resultadoSemanal; } set { resultadoSemanal = value; } }
         public string ResultadoMensual { get { return resultadoMensual; } set { resultadoMensual = value; } }
     }
-}

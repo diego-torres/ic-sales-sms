@@ -18,9 +18,9 @@ namespace SMSSender
         private string sendMethod, userName, password;
         private ISendable sendable;
 
-        private List<Enterprise> listEnterprises;
-        private List<Seller> listSellers;
-        private List<Director> listDirectors;
+        private List<Enterprise> listEnterprises = new List<Enterprise>();
+        private List<Seller> listSellers = new List<Seller>();
+        private List<Director> listDirectors =new List<Director>();
 
 
         public string UserName { get { return userName; } set { userName = value; } }
@@ -59,8 +59,8 @@ namespace SMSSender
             sellerDAO.readAll(conn);
             directorDAO.readAll(conn);
 
-            sellerDAO.setEnterprisesToSellers();
-            directorDAO.setEnterprisesToDirectors();
+            sellerDAO.setEnterprisesToSellers(enterpriseDAO);
+            directorDAO.setEnterprisesToDirectors(enterpriseDAO);
 
             listEnterprises = sellerDAO.readEmpresasInUse(listEnterprises);
             listEnterprises = directorDAO.readEmpresasInUse(listEnterprises);
@@ -84,31 +84,34 @@ namespace SMSSender
                 string sms;
                 foreach (Seller agente in listSellers)
                 {
-                    CultureInfo provider = CultureInfo.CreateSpecificCulture("en-US");
+                    if (agente.WeeklyGoal > 0)
+                    {
+                        CultureInfo provider = CultureInfo.CreateSpecificCulture("en-US");
 
-                    float cumplimientoSemanal = 100 * agente.CumplimientoSemana / agente.WeeklyGoal;
-                    float faltanteSemanal = agente.WeeklyGoal - agente.CumplimientoSemana;
-                    float cumplimientoMensual = 100 * agente.CumplimientoMensual / (agente.WeeklyGoal * 4);
-                    float faltanteMensual = agente.WeeklyGoal * 4 - agente.CumplimientoMensual;
+                        float cumplimientoSemanal =  agente.CumplimientoSemana / agente.WeeklyGoal;
+                        float faltanteSemanal = agente.WeeklyGoal - agente.CumplimientoSemana;
+                        float cumplimientoMensual = agente.CumplimientoMensual / (agente.WeeklyGoal * 4);
+                        float faltanteMensual = agente.WeeklyGoal * 4 - agente.CumplimientoMensual;
 
-                    empresa.ResultadoSemanal += string.Format("{0}:{1};", agente.Code, cumplimientoSemanal);
-                    empresa.ResultadoMensual += string.Format("{0}:{1};", agente.Code, cumplimientoMensual);
-                    //string faltanteTendencia = agente.Phone.FaltanteTendencia.ToString("C", provider);
+                        empresa.ResultadoSemanal += string.Format("{0}:{1};", agente.Code, cumplimientoSemanal.ToString("p"));
+                        empresa.ResultadoMensual += string.Format("{0}:{1};", agente.Code, cumplimientoMensual.ToString("p"));
+                        //string faltanteTendencia = agente.Phone.FaltanteTendencia.ToString("C", provider);
 
-                    string semanal = string.Format("Tu meta de venta de esta semana ha sido cumplida en un {0}, faltan {1} por vender",
-                        cumplimientoSemanal.ToString("p"), faltanteSemanal.ToString("C", provider));
+                        string semanal = string.Format("Tu meta de venta de esta semana ha sido cumplida en un {0}, faltan {1} por vender",
+                            cumplimientoSemanal.ToString("p"), faltanteSemanal.ToString("C", provider));
 
-                    if (agente.CumplimientoSemana >= 1)
-                        semanal = string.Format("Felicidades! Haz alcanzado el {0} de ventas en tu meta semanal", cumplimientoSemanal.ToString("p"));
+                        if (agente.CumplimientoSemana >= 1)
+                            semanal = string.Format("Felicidades! Haz alcanzado el {0} de ventas en tu meta semanal", cumplimientoSemanal.ToString("p"));
 
-                    string mensual = string.Format("Tu meta de venta de este mes ha sido cumplida en un {0}, faltan {1} por vender",
-                        cumplimientoMensual.ToString("p"), faltanteMensual.ToString("C", provider));
+                        string mensual = string.Format("Tu meta de venta de este mes ha sido cumplida en un {0}, faltan {1} por vender",
+                            cumplimientoMensual.ToString("p"), faltanteMensual.ToString("C", provider));
 
-                    if (agente.CumplimientoMensual >= 1)
-                        mensual = string.Format("Felicidades! Haz alcanzado el {0} de ventas en tu meta semanal", cumplimientoMensual.ToString("p"));
+                        if (agente.CumplimientoMensual >= 1)
+                            mensual = string.Format("Felicidades! Haz alcanzado el {0} de ventas en tu meta mensual", cumplimientoMensual.ToString("p"));
 
-                    sms = string.Format("{0}. {1}", semanal, mensual);
-                    byeSMS(agente.CellPhone, sms, userName, password);
+                        sms = string.Format("{0}" + Environment.NewLine + "{1}", semanal, mensual);
+                        byeSMS(agente.CellPhone, sms, userName, password);
+                    }
                 }
             }
         }
@@ -116,16 +119,20 @@ namespace SMSSender
         public void SendBossSMS()
         {
             foreach (Enterprise empresa in listEnterprises)
-            {
+            {   
                 string tituloSemanal, tituloMensual, sms;
-
-                tituloSemanal = "Cumplimiento de metas en venta semanal";
-                sms = string.Format("{0}: {1}", tituloSemanal, empresa.ResultadoSemanal);
-                SendBossSMS(sms, empresa);
-                
-                tituloMensual = "Cumplimiento de metas en venta mensual";
-                sms = string.Format("{0}: {1}", tituloMensual, empresa.ResultadoMensual);
-                SendBossSMS(sms, empresa);
+                if (empresa.ResultadoSemanal.Trim() != "")
+                {
+                    tituloSemanal = "Cumplimiento de metas en venta semanal";
+                    sms = string.Format("{0}: {1}", tituloSemanal, empresa.ResultadoSemanal);
+                    SendBossSMS(sms, empresa);
+                }
+                if (empresa.ResultadoMensual.Trim() != "")
+                {
+                    tituloMensual = "Cumplimiento de metas en venta mensual";
+                    sms = string.Format("{0}: {1}", tituloMensual, empresa.ResultadoMensual);
+                    SendBossSMS(sms, empresa);
+                }
             }
         }
 
