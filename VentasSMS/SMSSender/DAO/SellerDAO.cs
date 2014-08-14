@@ -16,9 +16,9 @@ namespace SMSSender.DAO
         public List<Seller> listSellers = new List<Seller>();
         public List<Seller> readAll(NpgsqlConnection conn)
         {
-            List<Seller> result = null;
+            List<Seller> result = new List<Seller>();
 
-            string sql = "SELECT seller_id, sms, ap_id, agent_code, agent_name, email, dim_sellers.cellphone, weekly_goal, id_empresa, fact_sales.sold_week, fact_sales.sold_month " +
+            string sql = "SELECT dim_sellers.seller_id, sms, ap_id, agent_code, agent_name, email, dim_sellers.cellphone, weekly_goal, id_empresa, fact_sales.sold_week, fact_sales.sold_month " +
                             "FROM dim_sellers LEFT JOIN fact_sales ON dim_sellers.seller_id = fact_sales.seller_id where sms = true";
 
             DataTable dt = new DataTable();
@@ -32,7 +32,7 @@ namespace SMSSender.DAO
                 {
                     Seller seller = new Seller();
 
-                    seller.ID = long.Parse(dt.Rows[i][i].ToString());
+                    seller.ID = long.Parse(dt.Rows[i][0].ToString());
                     seller.SMS = bool.Parse(dt.Rows[i][1].ToString());
                     seller.AP_ID = long.Parse(dt.Rows[i][2].ToString());
                     seller.Code = dt.Rows[i][3].ToString();
@@ -53,10 +53,8 @@ namespace SMSSender.DAO
             listSellers = result;
             return result;
         }
-        public void setEnterprisesToSellers()
+        public void setEnterprisesToSellers(EnterpriseDAO enterpriseDAO)
         {
-            EnterpriseDAO enterpriseDAO = new EnterpriseDAO();
-
             List<Enterprise> allEnterprises = enterpriseDAO.listEnterprises;
             foreach (Seller seller in listSellers)
             {
@@ -69,15 +67,18 @@ namespace SMSSender.DAO
             {
                 Enterprise currentEmpresa = seller.Empresa;
 
-                Enterprise alreadyExists = currentListEnterprises.Find(internalEmpresa => internalEmpresa.Id == currentEmpresa.Id);
-                if (alreadyExists == null)
+                if (currentEmpresa != null)
                 {
-                    currentEmpresa.Agentes.Add(seller);
-                    currentListEnterprises.Add(currentEmpresa);
-                }
-                else
-                {
-                    alreadyExists.Agentes.Add(seller);
+                    Enterprise alreadyExists = currentListEnterprises.Find(internalEmpresa => internalEmpresa.Id == currentEmpresa.Id);
+                    if (alreadyExists == null)
+                    {
+                        currentEmpresa.Agentes.Add(seller);
+                        currentListEnterprises.Add(currentEmpresa);
+                    }
+                    else
+                    {
+                        alreadyExists.Agentes.Add(seller);
+                    }
                 }
             }
 

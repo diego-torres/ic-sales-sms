@@ -309,7 +309,28 @@ namespace VentasSMS
 
             
         }
-
+        private void sendSMS(bool bUsePostgres)
+        {
+            try
+            {
+                //Postgresql mode
+                SalesPickerPostgresql sp = new SalesPickerPostgresql();
+                Settings set = Settings.Default;
+                sp.UserName = set.user;
+                sp.Password = set.password;
+                sp.SendMethod = SMSSender.CommonConstants.SMS_MAS_MENSAJES;
+                sp.RetrieveData();
+                sp.SendSMS();
+                sp.SendBossSMS();
+                Console.WriteLine("*******************************************");
+                Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                ErrLogger.Log(e.Message);
+                ErrLogger.Log(e.StackTrace);
+            }
+        }
         private void sendSMS()
         {
             string configFilePath = configuredFilePath();
@@ -403,7 +424,7 @@ namespace VentasSMS
         {
             DialogResult drSend = MessageBox.Show("¿Desea usted enviar los resúmenes de venta por SMS ahora?", "Confirmación de envío", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if(drSend == DialogResult.Yes)
-                sendSMS();
+                sendSMS(true);
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

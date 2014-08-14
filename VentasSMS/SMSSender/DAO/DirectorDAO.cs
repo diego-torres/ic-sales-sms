@@ -16,10 +16,10 @@ namespace SMSSender.DAO
         public List<Director> listDirectors = new List<Director>();
         public List<Director> readAll(NpgsqlConnection conn)
         {
-            List<Director> result = null;
+            List<Director> result = new List<Director>();
 
             string sql = "SELECT director_id, sms, director_name, email, cellphone, id_empresa " +
-                            "FROM dim_directos where sms = true";
+                            "FROM dim_directors where sms = true";
             
             DataTable dt = new DataTable();
             NpgsqlDataAdapter da = new NpgsqlDataAdapter(sql,conn);
@@ -46,10 +46,8 @@ namespace SMSSender.DAO
             return result;
         }
 
-        public void setEnterprisesToDirectors()
+        public void setEnterprisesToDirectors(EnterpriseDAO enterpriseDAO)
         {
-            EnterpriseDAO enterpriseDAO = new EnterpriseDAO();
-
             List<Enterprise> allEnterprises = enterpriseDAO.listEnterprises;
             foreach (Director director in listDirectors)
             {
@@ -61,16 +59,18 @@ namespace SMSSender.DAO
             foreach (Director director in listDirectors)
             {
                 Enterprise currentEmpresa = director.empresa;
-
-                Enterprise alreadyExists = currentListEnterprises.Find(internalEmpresa => internalEmpresa.Id == currentEmpresa.Id);
-                if (alreadyExists == null)
+                if (currentEmpresa != null)
                 {
-                    currentEmpresa.Directors.Add(director);
-                    currentListEnterprises.Add(currentEmpresa);
-                }
-                else
-                {
-                    alreadyExists.Directors.Add(director);
+                    Enterprise alreadyExists = currentListEnterprises.Find(internalEmpresa => internalEmpresa.Id == currentEmpresa.Id);
+                    if (alreadyExists == null)
+                    {
+                        currentEmpresa.Directors.Add(director);
+                        currentListEnterprises.Add(currentEmpresa);
+                    }
+                    else
+                    {
+                        alreadyExists.Directors.Add(director);
+                    }
                 }
             }
 
