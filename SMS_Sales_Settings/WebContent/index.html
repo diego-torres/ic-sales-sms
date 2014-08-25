@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>SMS Configuracion</title>
+
+<link rel="stylesheet" href="scripts/jQuery/themes/jquery-ui.min.css">
+
+<link rel="stylesheet" type="text/css"
+	href="scripts/dataTable/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css"
+	href="scripts/icheck/skins/square/grey.css">
+<link rel="stylesheet" type="text/css"
+	href="scripts/alertify/alertify.core.css">
+<link rel="stylesheet" type="text/css"
+	href="scripts/alertify/alertify.default.css">
+<link rel="stylesheet" type="text/css"
+	href="scripts/clockpicker/jquery-clockpicker.min.css">
+<link rel="stylesheet" type="text/css"
+	href="scripts/handsontable/jquery.handsontable.full.css">
+<link rel="stylesheet" type="text/css" href="scripts/chosen/chosen.css">
+<style type="text/css">
+body {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+}
+
+.checkboxDays {
+	display: block;
+	min-height: 25px;
+}
+
+#handsonTableSchedules td {
+	text-align: center;
+	font-size: 24px;
+}
+
+.handsontable .wtBorder {
+	display: none !important;
+}
+
+.handsontable td {
+	line-height: 60px;
+}
+
+.labels {
+	min-width: 81px;
+	display: inline-block;
+	text-align: right;
+}
+
+.MainTitle {
+	font-size: 40px;
+	margin: auto;
+	width: 420px;
+	display: block;
+}
+
+.Overlay {
+	display: none;
+	position: fixed;
+	min-height: 100%;
+	min-width: 100%;
+	z-index: 5000;
+	background-color: black;
+	filter: alpha(opacity =                                         50);
+	opacity: 0.3;
+	top: 0;
+	left: 0;
+}
+</style>
+
+<script src="scripts/jQuery/jquery-1.10.2.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.core.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.widget.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.mouse.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.draggable.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.position.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.resizable.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.button.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.dialog.min.js"></script>
+<script src="scripts/jQuery/ui/jquery.ui.tabs.min.js"></script>
+
+<script src="scripts/dataTable/js/jquery.dataTables.min.js"></script>
+<script src="scripts/icheck/icheck.min.js"></script>
+<script src="scripts/alertify/alertify.min.js"></script>
+<script src="scripts/clockpicker/jquery-clockpicker.min.js"></script>
+<script src="scripts/handsontable/jquery.handsontable.full.js"></script>
+<script src="scripts/utils/validator.js"></script>
+<script src="scripts/chosen/chosen.jquery.js"></script>
+</head>
+<body>
+	<div id="divImgEmail"
+		style="display: block; position: fixed; width: 120px; height: 35px; z-index: 1000; background-color: white; border: 2px solid gray; padding: 5px;">
+		<img alt="" src="images/loading.gif"
+			style="display: inline; position: relative;" /> <span
+			style="display: inline; position: relative;">En proceso..</span>
+	</div>
+	<div id="scrim" class="Overlay" onclick="hideScrim()"></div>
+	<div id="messageDisplayer" align="center"
+		style="color: Red; position: absolute; display: none; color: red; position: absolute; left: 67.5px; top: 645px; background-color: white; border: solid gray; border-radius: 20px; padding: 5px; z-index: 5001;">
+	</div>
+	<div id="divDialog_EditSeller" title="Agente" style="display: none;">
+		<div align="center">
+			<div id="divEditSeller">
+				<table>
+					<tr>
+						<td align="right"><b style="margin-right: 5px;">Agente:</b></td>
+						<td><input type="text" id="txtSellerName"
+							style="width: 350px;" validate="required"
+							validationid="validatingSellerSave" /></td>
+					</tr>
+					<tr>
+						<td align="right"><b style="margin-right: 5px;">Celular:</b>
+						</td>
+						<td><input type="text" id="txtSellerPhone"
+							style="width: 350px;" validate="required"
+							validationid="validatingSellerSave" /></td>
+					</tr>
+					<tr style="display: none;">
+						<td align="right"><b style="margin-right: 5px;">Email:</b></td>
+						<td><input type="text" id="txtSellerEmail"
+							style="width: 350px;" validate="email"
+							validationid="validatingSellerSave" /></td>
+					</tr>
+					<tr>
+						<td align="right"><b style="margin-right: 5px;">Meta
+								Semanal:</b></td>
+						<td><input type="text" id="txtSellerWeeklyGoal"
+							style="width: 350px;" validate="number"
+							validationid="validatingSellerSave" /></td>
+					</tr>
+					<tr style="height: 40px;">
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="3"><input type="button"
+							id="btnEditSeller" style="width: 80px;"
+							validationid="validatingSellerSave" value="Guardar" /> <input
+							type="button" id="btnCancelEditSeller"
+							onclick="on_closeEditSeller();" value="Cancelar"
+							style="width: 80px;" /></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="divDialog_EditDirector" title="Director"
+		style="display: none;">
+		<div align="center">
+			<div id="divEditDirector">
+				<table>
+					<tr>
+						<td align="right"><b style="margin-right: 5px;">Empresa:</b></td>
+						<td><div id="divEnterprises" style="display: block;"></div></td>
+					</tr>
+					<tr>
+						<td align="right"><b style="margin-right: 5px;">Director:</b></td>
+						<td><input type="text" id="txtDirectorName"
+							style="width: 350px;" validate="required"
+							validationid="validatingDirectorSave" /></td>
+					</tr>
+					<tr>
+						<td align="right"><b style="margin-right: 5px;">Celular:</b>
+						</td>
+						<td><input type="text" id="txtDirectorPhone"
+							style="width: 350px;" validate="required"
+							validationid="validatingDirectorSave" /></td>
+					</tr>
+					<tr style="display: none;">
+						<td align="right"><b style="margin-right: 5px;">Email:</b></td>
+						<td><input type="text" id="txtDirectorEmail"
+							style="width: 350px;" validate="email"
+							validationid="validatingDirectorSave" /></td>
+					</tr>
+					<tr style="height: 40px;">
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td align="center" colspan="3"><input type="button"
+							id="btnEditDirector" style="width: 80px;"
+							validationid="validatingDirectorSave" value="Guardar" /> <input
+							type="button" id="btnCancelEditDirector"
+							onclick="on_closeEditDirector();" value="Cancelar"
+							style="width: 80px;" /></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- 	<span style="float:right;">By InspiraCode</span> -->
+	<span class="MainTitle">SMS de Ventas</span>
+	<div id="tabs" style="border: 0; clear: both;">
+		<ul>
+			<li><a href="#tabs-1">Agentes</a></li>
+			<li><a href="#tabs-2">Directores</a></li>
+			<li><a href="#tabs-3">Configuracion</a></li>
+		</ul>
+		<div id="tabs-1"></div>
+		<div id="tabs-2"></div>
+		<div id="tabs-3">
+
+			<div id="divGrandContainer" style="max-width: 700px; margin: auto;">
+
+				<div id="divDaysContainer"
+					style="width: 130px; display: inline-block; min-width: 30%;">
+					<span class="checkboxDays"><input type="checkbox"
+						id="chkMonday" />&nbsp;Lunes</span> <span class="checkboxDays"><input
+						type="checkbox" id="chkTuesday" />&nbsp;Martes<br></span> <span
+						class="checkboxDays"><input type="checkbox"
+						id="chkWednesday" />&nbsp;Miercoles<br></span> <span
+						class="checkboxDays"><input type="checkbox"
+						id="chkThursday" />&nbsp;Jueves<br></span> <span
+						class="checkboxDays"><input type="checkbox" id="chkFriday" />&nbsp;Viernes<br></span>
+					<span class="checkboxDays"></span> <span class="checkboxDays"><input
+						type="checkbox" id="chkSaturday" />&nbsp;Sabado<br></span> <span
+						class="checkboxDays"><input type="checkbox" id="chkSunday" />&nbsp;Domingo<br></span>
+				</div>
+				<div id="divSchedules"
+					style="display: inline-block; vertical-align: top; min-width: 30%;">
+					<input type="button" id="btnAddNewSchedule" value="Agregar horario"
+						onclick="on_add_schedule();return false;"
+						style="height: 30px; width: 181px;" /> <br> <br>
+					<div id="handsonTableSchedules"></div>
+				</div>
+				<div id="divSMSUserPassword"
+					style="display: inline-block; vertical-align: top; min-width: 30%; float: right;">
+					<label class="labels">Usuario:</label> <input type="text"
+						id="txtUser" /><br> <label class="labels">Contraseña:</label>
+					<input type="password" id="txtPassword" /> <br> <br> <br>
+					<br> <input type="button" id="btnSaveSettings"
+						onclick="on_save_button_click();return false;"
+						value="Guardar configuracion" style="height: 30px; float: right;" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		jQuery(function() {
+			$.fn.dataTable.ext.order['dom-checkbox'] = function(settings, col) {
+				return this.api().column(col, {
+					order : 'index'
+				}).nodes().map(function(td, i) {
+					return $('input', td).prop('checked') ? '1' : '0';
+				});
+			};
+			jQuery(window).resize(function() {
+				centerPleaseWait();
+			});
+			centerPleaseWait();
+			jQuery("#tabs").tabs();
+			getResources();
+		});
+
+		var Sellers;
+		var Directors;
+		var Settings;
+		var Enterprises;
+		function getResources() {
+			getSellers();
+			getSettings();
+			getDirectors();
+			getEnterprises();
+		}
+
+		function getSellers() {
+			var to = '/SMS_Sales_Settings/GatewayServlet?cmd=readSellers';
+
+			jQuery("#divImgEmail").show();
+
+			jQuery.ajax({
+				type : "POST",
+				url : to,
+				data : {},
+				contentType : "application/json;charset=utf-8",
+				dataType : "html",
+				success : function(response) {
+					response = jQuery.parseJSON(response);
+					if (response.errorThrown === true) {
+						try {
+							onFail();
+						} catch (e) {
+						}
+						alertify.alert(response.responseDescription);
+					} else {
+						try {
+							onSuccess(response);
+						} catch (e) {
+						}
+						Sellers = response.result;
+						readCallBack();
+					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alertify.alert("An error has occurried.");
+					try {
+						onFail();
+					} catch (e) {
+					}
+				}
+			});
+		}
+		function getEnterprises() {
+			var to = '/SMS_Sales_Settings/GatewayServlet?cmd=readEnterprises';
+
+			jQuery("#divImgEmail").show();
+
+			jQuery.ajax({
+				type : "POST",
+				url : to,
+				data : {},
+				contentType : "application/json;charset=utf-8",
+				dataType : "html",
+				success : function(response) {
+					response = jQuery.parseJSON(response);
+					if (response.errorThrown === true) {
+						try {
+							onFail();
+						} catch (e) {
+						}
+						alertify.alert(response.responseDescription);
+					} else {
+						try {
+							onSuccess(response);
+						} catch (e) {
+						}
+						Enterprises = response.result;
+						readCallBack();
+					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alertify.alert("An error has occurried.");
+					try {
+						onFail();
+					} catch (e) {
+					}
+				}
+			});
+		}
+
+		function getDirectors() {
+			var to = '/SMS_Sales_Settings/GatewayServlet?cmd=readDirectors';
+
+			jQuery("#divImgEmail").show();
+
+			jQuery.ajax({
+				type : "POST",
+				url : to,
+				data : {},
+				contentType : "application/json;charset=utf-8",
+				dataType : "html",
+				success : function(response) {
+					response = jQuery.parseJSON(response);
+					if (response.errorThrown === true) {
+						try {
+							onFail();
+						} catch (e) {
+						}
+						alertify.alert(response.responseDescription);
+					} else {
+						try {
+							onSuccess(response);
+						} catch (e) {
+						}
+						Directors = response.result;
+						readCallBack();
+					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alertify.alert("An error has occurried.");
+					try {
+						onFail();
+					} catch (e) {
+					}
+				}
+			});
+		}
+
+		function getSettings() {
+			var to = '/SMS_Sales_Settings/GatewayServlet?cmd=readSettings';
+
+			jQuery("#divImgEmail").show();
+
+			jQuery.ajax({
+				type : "POST",
+				url : to,
+				data : {},
+				contentType : "application/json;charset=utf-8",
+				dataType : "html",
+				success : function(response) {
+					response = jQuery.parseJSON(response);
+					if (response.errorThrown === true) {
+						try {
+							onFail();
+						} catch (e) {
+						}
+						alertify.alert(response.responseDescription);
+					} else {
+						try {
+							onSuccess(response);
+						} catch (e) {
+						}
+						Settings = response.result;
+						readCallBack();
+					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alertify.alert("An error has occurried.");
+					try {
+						onFail();
+					} catch (e) {
+					}
+				}
+			});
+		}
+		var readCounter = 0;
+		function readCallBack() {
+			readCounter++;
+			if (readCounter == 4) {
+				readCounter = 0;
+				load();
+				jQuery("#divImgEmail").hide();
+			}
+		}
+		function load() {
+			populateSellers();
+			populateDirectors();
+			populateSettings();
+			populateEnterprises();
+		}
+		function getEnterpriseNameByID(idEnterprise) {
+			for ( var i = 0; i < Enterprises.length; i++) {
+				if (idEnterprise == Enterprises[i].id) {
+					return Enterprises[i].name;
+				}
+			}
+			return '';
+		}
+		function populateSellers() {
+			try {
+				$('#tableSellers').dataTable().destroy();
+			} catch (e) {
+				//This try is just for remove the table if exists
+			}
+			var arrSellersAdapter = [];
+			for ( var i = 0; i < Sellers.length; i++) {
+				var current = Sellers[i];
+				var arrCells = [
+						'<img src="images/edit-small.png" alt="Edit" onclick="on_editSeller_click('
+								+ current.id + ',this);return false;"'
+								+ ' style="height:20px;cursor:pointer;" />',
+						current.id, current.name, current.cellPhone,
+						// 						current.email, 
+						current.weeklyGoal,
+						getEnterpriseNameByID(current.idEnterprise),
+						current.sms ];
+				arrSellersAdapter.push(arrCells);
+
+			}
+			$('#tabs-1')
+					.html(
+							'<table cellpadding="0" cellspacing="0" border="0" class="display" id="tableSellers" style="text-align:center;"></table>');
+
+			$('#tableSellers')
+					.dataTable(
+							{
+								stateSave : true,
+								paging : true,
+								"data" : arrSellersAdapter,
+								"columnDefs" : [ {
+									"targets" : 6,
+									"render" : function(data, type, full, meta) {
+										if (data) {
+											return '<input type="checkbox" checked idSeller="' + full[1] +'" />';
+										} else {
+											return '<input type="checkbox" idSeller="' + full[1] +'" />';
+										}
+									}
+								} ],
+								"columns" : [ {
+									"title" : "",
+									"orderable" : false
+								}, {
+									"title" : "ID"
+								}, {
+									"title" : "Nombre"
+								}, {
+									"title" : "Celular"
+								},
+								// 								{
+								// 									"title" : "Email"
+								// 								}, 
+								{
+									"title" : "Meta Semanal"
+								}, {
+									"title" : "Empresa"
+								}, {
+									"title" : "SMS"
+								} ],
+								"order" : [ 1, 'asc' ],
+								"oLanguage" : {
+									"sSearch" : "Buscar:",
+									"sLengthMenu" : "Mostrar _MENU_ registros",
+									"sZeroRecords" : "No hay registros por mostrar",
+									"sInfo" : "Mostrando registros del _START_ al _END_ de _TOTAL_",
+									"oPaginate" : {
+										"sPrevious" : "Pagina anterior",
+										"sNext" : "Siguiente Pagina"
+									}
+								},
+								"drawCallback" : function(settings) {
+									jQuery('#tabs-1 input').iCheck({
+										checkboxClass : 'icheckbox_square-grey',
+										radioClass : 'iradio_square-grey',
+										increaseArea : '20%' // optional
+									}).off('ifChanged').on('ifChanged', function(event) {
+										on_sms_change(jQuery(event.target), "Seller");
+									});
+								}
+							});
+			
+		}
+		function populateEnterprises() {
+			var strEnterprisesHTML = '<select id="cboEnterprisesDirector">';
+			for ( var i = 0; i < Enterprises.length; i++) {
+				var current = Enterprises[i];
+				strEnterprisesHTML += '<option value="' + current.id + '">'
+						+ (current.name || "") + '</option>';
+			}
+			strEnterprisesHTML += '</select>';
+
+			jQuery('#divEnterprises').html(strEnterprisesHTML);
+			jQuery('#cboEnterprisesDirector').chosen({
+				width : '100%'
+			});
+		}
+		function populateDirectors() {
+			try {
+				$('#tableDirectors').dataTable().destroy();
+			} catch (e) {
+				//This try is just for remove the table if exists
+			}
+
+			var arrDirectorsAdapter = [];
+			for ( var i = 0; i < Directors.length; i++) {
+				var current = Directors[i];
+				var arrCells = [
+						'<img src="images/delete-small.png" alt="Delete" onclick="on_deleteDirector_click('
+								+ current.id
+								+ ',afterDeleteDirector);return false;"'
+								+ ' style="height:20px;cursor:pointer;" />',
+						'<img src="images/edit-small.png" alt="Edit" onclick="on_editDirector_click('
+								+ current.id + ',this);return false;"'
+								+ ' style="height:20px;cursor:pointer;" />',
+						current.id, current.name, current.cellPhone,
+						// 						current.email,
+						getEnterpriseNameByID(current.idEnterprise),
+						current.sms ];
+				arrDirectorsAdapter.push(arrCells);
+			}
+			$('#tabs-2')
+					.html(
+							'<br><input type="button" id="btnNewDirector" value="Nuevo Director" onclick="on_newDirector_click();return false;" /><br><br><br>'
+									+ '<table cellpadding="0" cellspacing="0" border="0" class="display" id="tableDirectors" style="text-align:center;"></table>');
+
+			$('#tableDirectors')
+					.dataTable(
+							{
+								stateSave : true,
+								paging : true,
+								"data" : arrDirectorsAdapter,
+								"columnDefs" : [ {
+									"targets" : 6,
+									"render" : function(data, type, full, meta) {
+										if (data) {
+											return '<input type="checkbox" checked idDirector="' + full[2] +'" />';
+										} else {
+											return '<input type="checkbox" idDirector="' + full[2] +'">';
+										}
+									}
+								} ],
+								"columns" : [ {
+									"title" : "",
+									"orderable" : false
+								}, {
+									"title" : "",
+									"orderable" : false
+								}, {
+									"title" : "ID"
+								}, {
+									"title" : "Nombre"
+								}, {
+									"title" : "Celular"
+								},
+								// 								{
+								// 									"title" : "Email"
+								// 								},
+								{
+									"title" : "Empresa"
+								}, {
+									"title" : "SMS"
+								} ],
+								"order" : [ 2, 'asc' ],
+								"oLanguage" : {
+									"sSearch" : "Buscar:",
+									"sLengthMenu" : "Mostrar _MENU_ registros",
+									"sZeroRecords" : "No hay registros por mostrar",
+									"sInfo" : "Mostrando registros del _START_ al _END_ de _TOTAL_",
+									"oPaginate" : {
+										"sPrevious" : "Pagina anterior",
+										"sNext" : "Siguiente Pagina"
+									}
+								},
+								"drawCallback" : function(settings) {
+									jQuery('#tabs-2 input')
+											.iCheck(
+													{
+														checkboxClass : 'icheckbox_square-grey',
+														radioClass : 'iradio_square-grey',
+														increaseArea : '20%' // optional
+													})
+											.off('ifChanged')
+											.on(
+													'ifChanged',
+													function(event) {
+														on_sms_change(
+																jQuery(event.target),
+																"Director");
+													});
+								}
+							});
+		}
+
+		var dataSchedules = [];
+
+		function populateSettings() {
+			jQuery('#tabs-3 input').iCheck({
+				checkboxClass : 'icheckbox_square-grey',
+				radioClass : 'iradio_square-grey',
+				increaseArea : '20%' // optional
+			});
+
+			// 		objSettings.sms_password = "Password";
+			// 		objSettings.sms_user = "user";
+			var sett = null;
+			if (Settings.length > 0) {
+				sett = Settings[0];
+			}
+			if (sett != null) {
+
+				jQuery("#chkMonday").iCheck(
+						sett.monSchedule === 'true' ? 'check' : 'uncheck');
+				jQuery("#chkTuesday").iCheck(
+						sett.tueSchedule === 'true' ? 'check' : 'uncheck');
+				jQuery("#chkWednesday").iCheck(
+						sett.wedSchedule === 'true' ? 'check' : 'uncheck');
+				jQuery("#chkThursday").iCheck(
+						sett.thuSchedule === 'true' ? 'check' : 'uncheck');
+				jQuery("#chkFriday").iCheck(
+						sett.friSchedule === 'true' ? 'check' : 'uncheck');
+				jQuery("#chkSaturday").iCheck(
+						sett.satSchedule === 'true' ? 'check' : 'uncheck');
+				jQuery("#chkSunday").iCheck(
+						sett.sunSchedule === 'true' ? 'check' : 'uncheck');
+
+				jQuery("#txtUser").val(sett.sms_user);
+				jQuery("#txtPassword").val(sett.sms_password);
+			}
+
+			var arrHours = [];
+			if (Settings.length > 0) {
+				arrHours = Settings[0].todSchedule.split(";");
+			}
+
+			dataSchedules = [];
+			for ( var i = 0; i < arrHours.length; i++) {
+				var strHour = jQuery.trim(arrHours[i]);
+				if (strHour != '') {
+					var oAdapter = {
+						schedule : htmlInputClock(dataSchedules.length, strHour),
+						theTime : strHour
+					};
+					dataSchedules.push(oAdapter);
+				}
+			}
+
+			jQuery("#handsonTableSchedules").handsontable({
+				data : dataSchedules,
+				colWidths : [ 180 ],
+				rowHeaders : false,
+				colHeaders : [ 'Horarios' ],
+				columns : [ {
+					data : "schedule",
+					renderer : "html",
+					readOnly : true
+				} ],
+				afterChange : function(changes, source) {
+					if (source != "loadData") {
+						// 		                        var data = this.getData();
+						// 		                        for (var i = 0; i < changes.length; i++) {
+						// 		                            var current = data[changes[i][0]];
+						// 		                            current.Sequence = 0;
+						// 		                            current.Id = -1;
+						// 		                            current.SifHeaderKey = -1;
+						// 		                            current.PercentVolumePerAward = 0;
+						// 		                            current.ProjectedTargetPrice = 0;
+						// 		                            current.AnnualRevenue = 0;
+						// 		                        }
+					}
+				},
+				afterRender : function(isForced) {
+					if (isForced) {
+
+						jQuery('.clockpicker').clockpicker({
+							autoclose : true,
+							'default' : 'now',
+							afterDone : function() {
+								on_clock_change();
+							}
+						});
+					}
+				},
+				afterSelection : function(r, c, r2, c2) {
+					currentEditIndexSchedule = r;
+				}
+			});
+		}
+		var currentEditIndexSchedule = -1;
+		function on_sms_change(source, catalog) {
+			var bSMS = source.is(':checked');
+			var idSource;
+			var idDirector;
+
+			var to;
+			if (catalog == "Seller") {
+				idSource = source.attr("idSeller");
+				to = '/SMS_Sales_Settings/GatewayServlet?cmd=sellerSMSUpdate&sellerid='
+						+ idSource + '&sms=' + bSMS;
+			} else {
+				idSource = source.attr("idDirector");
+				to = '/SMS_Sales_Settings/GatewayServlet?cmd=directorSMSUpdate&directorid='
+						+ idSource + '&sms=' + bSMS;
+			}
+
+			jQuery("#divImgEmail").show();
+
+			jQuery.ajax({
+				type : "POST",
+				url : to,
+				data : {},
+				contentType : "application/json;charset=utf-8",
+				dataType : "html",
+				success : function(response) {
+					response = jQuery.parseJSON(response);
+					if (response.errorThrown === true) {
+						try {
+							onFail();
+						} catch (e) {
+						}
+						alertify.alert(response.responseDescription);
+					} else {
+						try {
+							onSuccess(response);
+						} catch (e) {
+						}
+						alertify.success(response.responseDescription);
+					}
+					jQuery("#divImgEmail").hide();
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alertify.alert("An error has occurried.");
+					try {
+						onFail();
+					} catch (e) {
+					}
+					jQuery("#divImgEmail").hide();
+				}
+			});
+		}
+		function centerPleaseWait() {
+			jQuery('#divImgEmail').css(
+					"top",
+					(jQuery(window).height() / 2)
+							- (jQuery('#divImgEmail').outerHeight() / 2));
+			jQuery('#divImgEmail').css(
+					"left",
+					(jQuery(window).width() / 2)
+							- (jQuery('#divImgEmail').outerWidth() / 2));
+
+		}
+		function on_add_schedule() {
+			var oAdapter = {
+				schedule : htmlInputClock(dataSchedules.length, ''),
+				theTime : ""
+			};
+			dataSchedules.push(oAdapter);
+			jQuery("#handsonTableSchedules").handsontable("render");
+		}
+		function htmlInputClock(index, value) {
+			return '<div class="input-group clockpicker" style="position:relative;">'
+					+ '<img src="images/delete-small.png" alt="Delete" onclick="deleteSchedule();return false;"'
+					+ ' style="position:absolute;top: 18px;left: 10px;cursor:pointer;" >'
+					+ '<input type="text" onchange="on_clock_change();return false;" class="form-control" value="'
+					+ value
+					+ '" txtSchedule="'
+					+ index
+					+ '" style="border: 0;width: 170px;height: 50px;text-align: center;">'
+					+ '<span class="input-group-addon">'
+					+ '<span class="glyphicon glyphicon-time"></span></div>';
+		}
+		function deleteSchedule() {
+			dataSchedules.splice(currentEditIndexSchedule, 1);
+			jQuery("#handsonTableSchedules").handsontable("render");
+		}
+		function on_clock_change() {
+			var oAdapter = {
+				schedule : htmlInputClock(currentEditIndexSchedule, jQuery(
+						'[txtSchedule="' + currentEditIndexSchedule + '"]')
+						.val()),
+				theTime : jQuery(
+						'[txtSchedule="' + currentEditIndexSchedule + '"]')
+						.val()
+			};
+			dataSchedules[currentEditIndexSchedule] = oAdapter;
+
+		}
+		function on_save_button_click() {
+			var times = [];
+			for ( var i = 0; i < dataSchedules.length; i++) {
+				if (jQuery.trim(dataSchedules[i].theTime) != "") {
+					times.push(dataSchedules[i].theTime);
+				}
+			}
+
+			var objSettings = {};
+			if (Settings.length > 0) {
+				objSettings = Settings[0];
+			}
+
+			objSettings.monSchedule = jQuery("#chkMonday").is(":checked");
+			objSettings.tueSchedule = jQuery("#chkTuesday").is(":checked");
+			objSettings.wedSchedule = jQuery("#chkWednesday").is(":checked");
+			objSettings.thuSchedule = jQuery("#chkThursday").is(":checked");
+			objSettings.friSchedule = jQuery("#chkFriday").is(":checked");
+			objSettings.satSchedule = jQuery("#chkSaturday").is(":checked");
+			objSettings.sunSchedule = jQuery("#chkSunday").is(":checked");
+			objSettings.todSchedule = times.join(";");
+			objSettings.sms_password = jQuery("#txtPassword").val();
+			objSettings.sms_user = jQuery("#txtUser").val();
+
+			var to = '/SMS_Sales_Settings/GatewayServlet?cmd=settingsUpdate';
+
+			jQuery("#divImgEmail").show();
+
+			jQuery.ajax({
+				type : "POST",
+				url : to,
+				contentType : "application/json;charset=utf-8",
+				data : JSON.stringify(objSettings),
+				dataType : "json",
+				success : function(response) {
+					if (response.errorThrown === true) {
+						try {
+							onFail();
+						} catch (e) {
+						}
+						alertify.alert(response.responseDescription);
+					} else {
+						try {
+							onSuccess(response);
+						} catch (e) {
+						}
+						Settings = [];
+						Settings.push(response.result);
+						alertify.success(response.responseDescription);
+					}
+					jQuery("#divImgEmail").hide();
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alertify.alert("An error has occurried.");
+					try {
+						onFail();
+					} catch (e) {
+					}
+					jQuery("#divImgEmail").hide();
+				}
+			});
+		}
+
+		function getSellerByID(idSeller) {
+			for ( var i = 0; i < Sellers.length; i++) {
+				if (Sellers[i].id == idSeller)
+					return Sellers[i];
+			}
+			return null;
+		}
+		function on_deleteSeller_click(idSeller, source) {
+			for ( var i = 0; i < Sellers.length; i++) {
+				if (idSeller == Sellers[i].id) {
+					Sellers.splice(i, 1);
+					break;
+				}
+			}
+			populateSellers();
+		}
+		function on_editSeller_click(idSeller, source) {
+			event.preventDefault();
+			var sellerToUpdate = getSellerByID(idSeller);
+			if (sellerToUpdate == null) {
+				alertify
+						.alert("An error has occurried. Please refresh the page and try again.");
+				return;
+			}
+			jQuery("#btnEditSeller").prop("disabled", false);
+			jQuery("#btnCancelEditSeller").prop("disabled", false);
+
+			jQuery("#txtSellerName").val(sellerToUpdate.name);
+			jQuery("#txtSellerPhone").val(sellerToUpdate.cellPhone);
+			// 			jQuery("#txtSellerEmail").val(sellerToUpdate.email);
+			jQuery("#txtSellerWeeklyGoal").val(sellerToUpdate.weeklyGoal);
+			jQuery("#btnEditSeller").unbind("click").click(function() {
+				updateSeller(sellerToUpdate, afterEditSeller);
+			});
+
+			jQuery("#divDialog_EditSeller").dialog({
+				autoOpen : true,
+				width : 520,
+				modal : true,
+				closeOnEscape : true,
+				title : "Actualizar Agente"
+			});
+		}
+		function updateSeller(sellerToUpdate, onSuccess) {
+			if (validate()) {
+				jQuery("#btnEditSeller").prop("disabled", true);
+				jQuery("#btnCancelEditSeller").prop("disabled", true);
+
+				sellerToUpdate.name = jQuery("#txtSellerName").val();
+				sellerToUpdate.cellPhone = jQuery("#txtSellerPhone").val();
+				// 				sellerToUpdate.email = jQuery("#txtSellerEmail").val();
+				sellerToUpdate.weeklyGoal = jQuery("#txtSellerWeeklyGoal")
+						.val();
+				sellerToUpdate.sms = jQuery(
+						'[idseller="' + sellerToUpdate.id + '"]')
+						.is(":checked");
+
+				var to = '/SMS_Sales_Settings/GatewayServlet?cmd=sellerUpdate';
+
+				jQuery("#divImgEmail").css("display", "block");
+				jQuery.ajax({
+					type : "POST",
+					url : to,
+					data : JSON.stringify(sellerToUpdate),
+					contentType : "application/json;charset=utf-8",
+					dataType : "json",
+					success : function(response) {
+						//response = jQuery.parseJSON(response);
+						if (response.errorThrown === true) {
+							try {
+								onFail();
+							} catch (e) {
+							}
+							alertify.alert(response.responseDescription);
+						} else {
+							try {
+								onSuccess(sellerToUpdate);
+							} catch (e) {
+							}
+							alertify.success(response.responseDescription);
+						}
+						jQuery("#divImgEmail").hide();
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						alertify.alert("An error has occurried.");
+						try {
+							onFail();
+						} catch (e) {
+						}
+						jQuery("#btnEditSeller").prop("disabled", false);
+						jQuery("#btnCancelEditSeller").prop("disabled", false);
+						jQuery("#divImgEmail").hide();
+					}
+				});
+			} else {
+				jQuery("#btnEditSeller").prop("disabled", false);
+				jQuery("#btnCancelEditSeller").prop("disabled", false);
+				return;
+			}
+		}
+		function afterEditSeller(sellerUpdated) {
+			for ( var i = 0; i < Sellers.length; i++) {
+				if (sellerUpdated.id == Sellers[i].id) {
+					Sellers[i] = sellerUpdated;
+					populateSellers();
+					break;
+				}
+			}
+			jQuery("#divDialog_EditSeller").dialog("close");
+		}
+		function on_closeEditSeller() {
+			jQuery("#divDialog_EditSeller").dialog("close");
+		}
+		function on_newSeller_click() {
+			event.preventDefault();
+			jQuery("#btnEditSeller").prop("disabled", false);
+			jQuery("#btnCancelEditSeller").prop("disabled", false);
+
+			jQuery("#txtSellerName").val('');
+			jQuery("#txtSellerPhone").val('');
+			// 			jQuery("#txtSellerEmail").val('');
+			jQuery("#btnEditSeller").unbind("click").click(function() {
+				createSeller(afterCreateSeller);
+			});
+
+			jQuery("#divDialog_EditSeller").dialog({
+				autoOpen : true,
+				width : 520,
+				modal : true,
+				closeOnEscape : true,
+				title : "Nuevo Agente"
+			});
+		}
+		function createSeller(onSuccess) {
+			if (validate()) {
+				jQuery("#btnEditSeller").prop("disabled", true);
+				jQuery("#btnCancelEditSeller").prop("disabled", true);
+
+				var sellerToCreate = {
+					cellPhone : jQuery("#txtSellerPhone").val(),
+					// 					email : jQuery("#txtSellerEmail").val(),
+					name : jQuery("#txtSellerName").val()
+				};
+
+				var to = '/SMS_Sales_Settings/GatewayServlet?cmd=sellerCreate';
+
+				jQuery("#divImgEmail").css("display", "block");
+				jQuery.ajax({
+					type : "POST",
+					url : to,
+					data : JSON.stringify(sellerToCreate),
+					contentType : "application/json;charset=utf-8",
+					dataType : "json",
+					success : function(response) {
+						//response = jQuery.parseJSON(response);
+						if (response.errorThrown === true) {
+							try {
+								onFail();
+							} catch (e) {
+							}
+							alertify.alert(response.responseDescription);
+						} else {
+							try {
+								onSuccess(response);
+							} catch (e) {
+							}
+							alertify.success(response.responseDescription);
+						}
+						jQuery("#btnEditSeller").prop("disabled", false);
+						jQuery("#btnCancelEditSeller").prop("disabled", false);
+						jQuery("#divImgEmail").hide();
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						alertify.alert("An error has occurried.");
+						try {
+							onFail();
+						} catch (e) {
+						}
+						jQuery("#btnEditSeller").prop("disabled", false);
+						jQuery("#btnCancelEditSeller").prop("disabled", false);
+						jQuery("#divImgEmail").hide();
+					}
+				});
+			} else {
+				jQuery("#btnEditSeller").prop("disabled", false);
+				jQuery("#btnCancelEditSeller").prop("disabled", false);
+				return;
+			}
+		}
+		function afterCreateSeller(response) {
+			var sellerCreated = response.result;
+			Sellers.push(sellerCreated);
+			var arrCells = [
+					'<img src="images/delete-small.png" alt="Delete" onclick="on_deleteSeller_click('
+							+ sellerCreated.id
+							+ ',this);return false;"'
+							+ ' style="height:20px;cursor:pointer;" />',
+					'<img src="images/edit-small.png" alt="Edit" onclick="on_editSeller_click('
+							+ sellerCreated.id + ',this);return false;"'
+							+ ' style="height:20px;cursor:pointer;" />',
+					sellerCreated.id, sellerCreated.name,
+					sellerCreated.cellPhone,
+					// 					sellerCreated.email,
+					sellerCreated.weeklyGoal,
+					getEnterpriseNameByID(sellerCreated.idEnterprise),
+					sellerCreated.sms ];
+			$('#tableSellers').DataTable().row.add(arrCells).draw();
+			jQuery("#divDialog_EditSeller").dialog("close");
+
+		}
+
+		/* Directors******************************************************************/
+
+		function getDirectorByID(idDirector) {
+			for ( var i = 0; i < Directors.length; i++) {
+				if (Directors[i].id == idDirector)
+					return Directors[i];
+			}
+			return null;
+		}
+		function on_deleteDirector_click(idDirector, onSuccess) {
+			if (confirm("¿Desea eliminar el registro?")) {
+				var to = '/SMS_Sales_Settings/GatewayServlet?cmd=directorDelete&directorid='
+						+ idDirector;
+
+				jQuery("#divImgEmail").show();
+
+				jQuery.ajax({
+					type : "POST",
+					url : to,
+					data : {},
+					contentType : "application/json;charset=utf-8",
+					dataType : "html",
+					success : function(response) {
+						response = jQuery.parseJSON(response);
+						if (response.errorThrown === true) {
+							try {
+								onFail();
+							} catch (e) {
+							}
+							alertify.alert(response.responseDescription);
+						} else {
+							try {
+								onSuccess(idDirector);
+							} catch (e) {
+							}
+							alertify.success(response.responseDescription);
+						}
+						jQuery("#divImgEmail").hide();
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						alertify.alert("An error has occurried.");
+						try {
+							onFail();
+						} catch (e) {
+						}
+						jQuery("#divImgEmail").hide();
+					}
+				});
+			}
+		}
+		function afterDeleteDirector(idDirector) {
+			for ( var i = 0; i < Directors.length; i++) {
+				if (idDirector == Directors[i].id) {
+					Directors.splice(i, 1);
+					break;
+				}
+			}
+			populateDirectors();
+
+		}
+		function on_editDirector_click(idDirector, source) {
+			event.preventDefault();
+			var directorToUpdate = getDirectorByID(idDirector);
+			if (directorToUpdate == null) {
+				alertify
+						.alert("An error has occurried. Please refresh the page and try again.");
+				return;
+			}
+			jQuery("#btnEditDirector").prop("disabled", false);
+			jQuery("#btnCancelEditDirector").prop("disabled", false);
+
+			jQuery("#txtDirectorName").val(directorToUpdate.name);
+			jQuery("#txtDirectorPhone").val(directorToUpdate.cellPhone);
+			// 			jQuery("#txtDirectorEmail").val(directorToUpdate.email);
+			jQuery("#cboEnterprisesDirector")
+					.val(directorToUpdate.idEnterprise).trigger(
+							"chosen:updated");
+
+			jQuery("#btnEditDirector").unbind("click").click(function() {
+				updateDirector(directorToUpdate, afterEditDirector);
+			});
+
+			jQuery("#divDialog_EditDirector").dialog({
+				autoOpen : true,
+				width : 520,
+				modal : true,
+				closeOnEscape : true,
+				title : "Actualizar Director"
+			});
+		}
+		function updateDirector(directorToUpdate, onSuccess) {
+			if (validate()) {
+				jQuery("#btnEditDirector").prop("disabled", true);
+				jQuery("#btnCancelEditDirector").prop("disabled", true);
+
+				directorToUpdate.name = jQuery("#txtDirectorName").val();
+				directorToUpdate.cellPhone = jQuery("#txtDirectorPhone").val();
+				// 				directorToUpdate.email = jQuery("#txtDirectorEmail").val();
+				directorToUpdate.sms = jQuery(
+						'[iddirector="' + directorToUpdate.id + '"]').is(
+						":checked");
+				directorToUpdate.idEnterprise = jQuery(
+						"#cboEnterprisesDirector option:selected").val();
+
+				//directorToUpdate.weeklyGoal = jQuery("#cboEnterpriseDirector").val();
+
+				var to = '/SMS_Sales_Settings/GatewayServlet?cmd=directorUpdate';
+
+				jQuery("#divImgEmail").css("display", "block");
+				jQuery.ajax({
+					type : "POST",
+					url : to,
+					data : JSON.stringify(directorToUpdate),
+					contentType : "application/json;charset=utf-8",
+					dataType : "json",
+					success : function(response) {
+						//response = jQuery.parseJSON(response);
+						if (response.errorThrown === true) {
+							try {
+								onFail();
+							} catch (e) {
+							}
+							alertify.alert(response.responseDescription);
+						} else {
+							try {
+								onSuccess(directorToUpdate);
+							} catch (e) {
+							}
+							alertify.success(response.responseDescription);
+						}
+						jQuery("#btnEditDirector").prop("disabled", false);
+						jQuery("#btnCancelEditDirector")
+								.prop("disabled", false);
+						jQuery("#divImgEmail").hide();
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						alertify.alert("An error has occurried.");
+						try {
+							onFail();
+						} catch (e) {
+						}
+						jQuery("#btnEditDirector").prop("disabled", false);
+						jQuery("#btnCancelEditDirector")
+								.prop("disabled", false);
+						jQuery("#divImgEmail").hide();
+					}
+				});
+			} else {
+				jQuery("#btnEditDirector").prop("disabled", false);
+				jQuery("#btnCancelEditDirector").prop("disabled", false);
+				return;
+			}
+		}
+		function afterEditDirector(directorUpdated) {
+			for ( var i = 0; i < Directors.length; i++) {
+				if (directorUpdated.id == Directors[i].id) {
+					Directors[i] = directorUpdated;
+					populateDirectors();
+					break;
+				}
+			}
+			jQuery("#divDialog_EditDirector").dialog("close");
+		}
+		function on_closeEditDirector() {
+			jQuery("#divDialog_EditDirector").dialog("close");
+		}
+		function on_newDirector_click() {
+			event.preventDefault();
+			jQuery("#btnEditDirector").prop("disabled", false);
+			jQuery("#btnCancelEditDirector").prop("disabled", false);
+
+			jQuery("#txtDirectorName").val('');
+			jQuery("#txtDirectorPhone").val('');
+			// 			jQuery("#txtDirectorEmail").val('');
+			jQuery("#cboEnterprisesDirector").val(0).trigger("chosen:updated");
+			jQuery("#btnEditDirector").unbind("click").click(function() {
+				createDirector(afterCreateDirector);
+			});
+
+			jQuery("#divDialog_EditDirector").dialog({
+				autoOpen : true,
+				width : 520,
+				modal : true,
+				closeOnEscape : true,
+				title : "Nuevo Director"
+			});
+		}
+		function createDirector(onSuccess) {
+			if (validate()) {
+				jQuery("#btnEditDirector").prop("disabled", true);
+				jQuery("#btnCancelEditDirector").prop("disabled", true);
+
+				var directorToCreate = {
+					cellPhone : jQuery("#txtDirectorPhone").val(),
+					// 					email : jQuery("#txtDirectorEmail").val(),
+					name : jQuery("#txtDirectorName").val(),
+					idEnterprise : jQuery(
+							"#cboEnterprisesDirector option:selected").val()
+				};
+
+				var to = '/SMS_Sales_Settings/GatewayServlet?cmd=directorCreate';
+
+				jQuery("#divImgEmail").css("display", "block");
+				jQuery.ajax({
+					type : "POST",
+					url : to,
+					data : JSON.stringify(directorToCreate),
+					contentType : "application/json;charset=utf-8",
+					dataType : "json",
+					success : function(response) {
+						//response = jQuery.parseJSON(response);
+						if (response.errorThrown === true) {
+							try {
+								onFail();
+							} catch (e) {
+							}
+							alertify.alert(response.responseDescription);
+						} else {
+							try {
+								onSuccess(response);
+							} catch (e) {
+							}
+							alertify.success(response.responseDescription);
+						}
+						jQuery("#btnEditDirector").prop("disabled", false);
+						jQuery("#btnCancelEditDirector")
+								.prop("disabled", false);
+						jQuery("#divImgEmail").hide();
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						alertify.alert("An error has occurried.");
+						try {
+							onFail();
+						} catch (e) {
+						}
+						jQuery("#btnEditDirector").prop("disabled", false);
+						jQuery("#btnCancelEditDirector")
+								.prop("disabled", false);
+						jQuery("#divImgEmail").hide();
+					}
+				});
+			} else {
+				jQuery("#btnEditDirector").prop("disabled", false);
+				jQuery("#btnCancelEditDirector").prop("disabled", false);
+				return;
+			}
+		}
+		function afterCreateDirector(response) {
+			var directorCreated = response.result;
+			Directors.push(directorCreated);
+			var arrCells = [
+					'<img src="images/delete-small.png" alt="Delete" onclick="on_deleteDirector_click('
+							+ directorCreated.id
+							+ ',afterDeleteDirector);return false;"'
+							+ ' style="height:20px;cursor:pointer;" />',
+					'<img src="images/edit-small.png" alt="Edit" onclick="on_editDirector_click('
+							+ directorCreated.id + ',this);return false;"'
+							+ ' style="height:20px;cursor:pointer;" />',
+					directorCreated.id, directorCreated.name,
+					directorCreated.cellPhone,
+					// 					directorCreated.email,
+					getEnterpriseNameByID(directorCreated.idEnterprise),
+					directorCreated.sms ];
+			$('#tableDirectors').DataTable().row.add(arrCells).draw();
+			jQuery("#divDialog_EditDirector").dialog("close");
+// 			jQuery('#tabs-2 input').iCheck({
+// 				checkboxClass : 'icheckbox_square-grey',
+// 				radioClass : 'iradio_square-grey',
+// 				increaseArea : '20%' // optional
+// 			}).off('ifChanged').on('ifChanged', function(event) {
+// 				on_sms_change(jQuery(event.target), "Director");
+// 			});
+		}
+	</script>
+</body>
+
+
+
+</html>

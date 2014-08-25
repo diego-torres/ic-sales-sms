@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Excel = Microsoft.Office.Interop.Excel;
-using CommonAdminPaq;
-using CommonAdminPaq.dto;
-using System.Runtime.InteropServices;
 using System.Globalization;
 using Npgsql;
 using SMSSender.Entities;
@@ -82,7 +76,7 @@ namespace SMSSender
                 empresa.ResultadoSemanal = "";
                 empresa.ResultadoMensual = "";
                 string sms;
-                foreach (Seller agente in listSellers)
+                foreach (Seller agente in empresa.Agentes)
                 {
                     if (agente.WeeklyGoal > 0)
                     {

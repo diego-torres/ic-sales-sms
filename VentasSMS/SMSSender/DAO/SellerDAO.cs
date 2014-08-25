@@ -18,8 +18,10 @@ namespace SMSSender.DAO
         {
             List<Seller> result = new List<Seller>();
 
-            string sql = "SELECT dim_sellers.seller_id, sms, ap_id, agent_code, agent_name, email, dim_sellers.cellphone, weekly_goal, id_empresa, fact_sales.sold_week, fact_sales.sold_month " +
-                            "FROM dim_sellers LEFT JOIN fact_sales ON dim_sellers.seller_id = fact_sales.seller_id where sms = true";
+            string sql = "SELECT dim_sellers.seller_id,sms,ap_id,agent_code,agent_name,email,dim_sellers.cellphone,weekly_goal, " +
+                            "id_empresa	,sum(fact_sales.sold_week) AS sold_week	,sum(fact_sales.sold_month) AS sold_month " +
+                            "FROM dim_sellers LEFT JOIN fact_sales ON dim_sellers.seller_id = fact_sales.seller_id WHERE sms = true  " +
+                            "GROUP BY dim_sellers.seller_id,sms,ap_id,agent_code,agent_name,email,dim_sellers.cellphone,weekly_goal,id_empresa";
 
             DataTable dt = new DataTable();
             NpgsqlDataAdapter da = new NpgsqlDataAdapter(sql, conn);
@@ -41,9 +43,23 @@ namespace SMSSender.DAO
                     seller.CellPhone = dt.Rows[i][6].ToString();
                     seller.WeeklyGoal = float.Parse(dt.Rows[i][7].ToString());
                     seller.Enterprise_ID = long.Parse(dt.Rows[i][8].ToString());
-                    seller.CumplimientoSemana = float.Parse(dt.Rows[i][9].ToString());
-                    seller.CumplimientoMensual = float.Parse(dt.Rows[i][10].ToString());
-                    
+                    if (dt.Rows[i][9].ToString() == "")
+                    {
+                        seller.CumplimientoSemana = 0;
+                    }
+                    else
+                    {
+                        seller.CumplimientoSemana = float.Parse(dt.Rows[i][9].ToString());
+                    }
+                    if (dt.Rows[i][10].ToString() == "")
+                    {
+                        seller.CumplimientoMensual = 0;
+                    }
+                    else
+                    {
+                        seller.CumplimientoMensual = float.Parse(dt.Rows[i][10].ToString());
+                    }
+
                     result.Add(seller);
                 }
             }
