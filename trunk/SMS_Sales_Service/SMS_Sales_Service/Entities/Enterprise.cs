@@ -11,7 +11,7 @@ public class Enterprise
 
         // FIELD PROPERTIES FOR OBJECT
         private long id;
-        private string nombre, ruta, alias, resultadoSemanal, resultadoMensual;
+        private string nombre, ruta, alias, resultadoSemanal, resultadoMensual, resultadoDiario;
         private List<Seller> agentes = new List<Seller>();
         private List<Director> directors = new List<Director>();
         private IList<long> cSale = new List<long>();
@@ -28,4 +28,5 @@ public class Enterprise
         public List<Director> Directors { get { return directors; } set { directors = value; } }
         public string ResultadoSemanal { get { return resultadoSemanal; } set { resultadoSemanal = value; } }
         public string ResultadoMensual { get { return resultadoMensual; } set { resultadoMensual = value; } }
+        public string ResultadoDiario { get { return resultadoDiario; } set { resultadoDiario = value; } }
     }

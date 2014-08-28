@@ -57,7 +57,7 @@ namespace SMS_Sales_Service.Entities
             {
                 new NpgsqlCommand("delete from sys_sms_settings", conn).ExecuteNonQuery();
                 rowsaffected = command.ExecuteNonQuery();
-                eventLog.WriteEntry("Settings update done.", System.Diagnostics.EventLogEntryType.Information);
+                eventLog.WriteEntry("Actualizacion de configuracion efectuada.", System.Diagnostics.EventLogEntryType.Information);
             }
             finally
             {
