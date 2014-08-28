@@ -63,7 +63,7 @@ body {
 	min-width: 100%;
 	z-index: 5000;
 	background-color: black;
-	filter: alpha(opacity =                                         50);
+	filter: alpha(opacity =                                           50);
 	opacity: 0.3;
 	top: 0;
 	left: 0;
@@ -106,9 +106,7 @@ body {
 				<table>
 					<tr>
 						<td align="right"><b style="margin-right: 5px;">Agente:</b></td>
-						<td><input type="text" id="txtSellerName"
-							style="width: 350px;" validate="required"
-							validationid="validatingSellerSave" /></td>
+						<td><label id="lblSellerName" style="width: 350px;"></label></td>
 					</tr>
 					<tr>
 						<td align="right"><b style="margin-right: 5px;">Celular:</b>
@@ -510,16 +508,24 @@ body {
 									}
 								},
 								"drawCallback" : function(settings) {
-									jQuery('#tabs-1 input').iCheck({
-										checkboxClass : 'icheckbox_square-grey',
-										radioClass : 'iradio_square-grey',
-										increaseArea : '20%' // optional
-									}).off('ifChanged').on('ifChanged', function(event) {
-										on_sms_change(jQuery(event.target), "Seller");
-									});
+									jQuery('#tabs-1 input')
+											.iCheck(
+													{
+														checkboxClass : 'icheckbox_square-grey',
+														radioClass : 'iradio_square-grey',
+														increaseArea : '20%' // optional
+													})
+											.off('ifChanged')
+											.on(
+													'ifChanged',
+													function(event) {
+														on_sms_change(
+																jQuery(event.target),
+																"Seller");
+													});
 								}
 							});
-			
+
 		}
 		function populateEnterprises() {
 			var strEnterprisesHTML = '<select id="cboEnterprisesDirector">';
@@ -915,7 +921,7 @@ body {
 			jQuery("#btnEditSeller").prop("disabled", false);
 			jQuery("#btnCancelEditSeller").prop("disabled", false);
 
-			jQuery("#txtSellerName").val(sellerToUpdate.name);
+			jQuery("#lblSellerName").text(sellerToUpdate.name);
 			jQuery("#txtSellerPhone").val(sellerToUpdate.cellPhone);
 			// 			jQuery("#txtSellerEmail").val(sellerToUpdate.email);
 			jQuery("#txtSellerWeeklyGoal").val(sellerToUpdate.weeklyGoal);
@@ -936,7 +942,7 @@ body {
 				jQuery("#btnEditSeller").prop("disabled", true);
 				jQuery("#btnCancelEditSeller").prop("disabled", true);
 
-				sellerToUpdate.name = jQuery("#txtSellerName").val();
+				sellerToUpdate.name = jQuery("#lblSellerName").text();
 				sellerToUpdate.cellPhone = jQuery("#txtSellerPhone").val();
 				// 				sellerToUpdate.email = jQuery("#txtSellerEmail").val();
 				sellerToUpdate.weeklyGoal = jQuery("#txtSellerWeeklyGoal")
@@ -1006,7 +1012,7 @@ body {
 			jQuery("#btnEditSeller").prop("disabled", false);
 			jQuery("#btnCancelEditSeller").prop("disabled", false);
 
-			jQuery("#txtSellerName").val('');
+			jQuery("#lblSellerName").text('');
 			jQuery("#txtSellerPhone").val('');
 			// 			jQuery("#txtSellerEmail").val('');
 			jQuery("#btnEditSeller").unbind("click").click(function() {
@@ -1029,7 +1035,7 @@ body {
 				var sellerToCreate = {
 					cellPhone : jQuery("#txtSellerPhone").val(),
 					// 					email : jQuery("#txtSellerEmail").val(),
-					name : jQuery("#txtSellerName").val()
+					name : jQuery("#lblSellerName").text()
 				};
 
 				var to = '/SMS_Sales_Settings/GatewayServlet?cmd=sellerCreate';
@@ -1364,13 +1370,13 @@ body {
 					directorCreated.sms ];
 			$('#tableDirectors').DataTable().row.add(arrCells).draw();
 			jQuery("#divDialog_EditDirector").dialog("close");
-// 			jQuery('#tabs-2 input').iCheck({
-// 				checkboxClass : 'icheckbox_square-grey',
-// 				radioClass : 'iradio_square-grey',
-// 				increaseArea : '20%' // optional
-// 			}).off('ifChanged').on('ifChanged', function(event) {
-// 				on_sms_change(jQuery(event.target), "Director");
-// 			});
+			// 			jQuery('#tabs-2 input').iCheck({
+			// 				checkboxClass : 'icheckbox_square-grey',
+			// 				radioClass : 'iradio_square-grey',
+			// 				increaseArea : '20%' // optional
+			// 			}).off('ifChanged').on('ifChanged', function(event) {
+			// 				on_sms_change(jQuery(event.target), "Director");
+			// 			});
 		}
 	</script>
 </body>
