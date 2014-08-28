@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMS_Sales_Service", "SMS_Sales_Service\SMS_Sales_Service.csproj", "{4E0A724F-BB13-4BF1-A162-5B488BC169B6}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SMS_Sales_Service_Setup", "SMS_Sales_Service_Setup\SMS_Sales_Service_Setup.vdproj", "{549E1028-07AB-444C-9F68-5FEF36FEF894}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SMS_Sales_Service_Setup", "SMS_Sales_Service_Setup\SMS_Sales_Service_Setup.vdproj", "{23928279-8943-46D0-A5D3-EDC66D054BA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +15,8 @@ Global
 		{4E0A724F-BB13-4BF1-A162-5B488BC169B6}.Debug|x86.Build.0 = Debug|x86
 		{4E0A724F-BB13-4BF1-A162-5B488BC169B6}.Release|x86.ActiveCfg = Release|x86
 		{4E0A724F-BB13-4BF1-A162-5B488BC169B6}.Release|x86.Build.0 = Release|x86
-		{549E1028-07AB-444C-9F68-5FEF36FEF894}.Debug|x86.ActiveCfg = Debug
-		{549E1028-07AB-444C-9F68-5FEF36FEF894}.Release|x86.ActiveCfg = Release
+		{23928279-8943-46D0-A5D3-EDC66D054BA0}.Debug|x86.ActiveCfg = Debug
+		{23928279-8943-46D0-A5D3-EDC66D054BA0}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

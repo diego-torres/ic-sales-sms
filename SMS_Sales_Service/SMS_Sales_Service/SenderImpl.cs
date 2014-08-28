@@ -11,7 +11,7 @@ namespace SMSSender
 
         private string userName, password;
 
-        public void SendSMS(Sms sms)
+        public void SendSMS(Sms sms, System.Diagnostics.EventLog eventLog)
         {
             string urlRequest;
 
@@ -35,8 +35,8 @@ namespace SMSSender
             {
                 i++;
                 sLine = objReader.ReadLine();
-                //if (sLine != null && sLine.Contains("ERROR"))
-                    //ErrLogger.Log(sLine);
+                if (sLine != null && sLine.Contains("ERROR"))
+                    eventLog.WriteEntry("Error: " + sLine, System.Diagnostics.EventLogEntryType.Error);
             }
         }
 
@@ -49,7 +49,7 @@ namespace SMSSender
     public class LocalSMS : ISendable
     {
 
-        public void SendSMS(Sms sms)
+        public void SendSMS(Sms sms, System.Diagnostics.EventLog eventLog)
         {
             string fileName = @"c:\temp\sms_" + sms.To + ".txt";
             using (StreamWriter w = File.AppendText(fileName))

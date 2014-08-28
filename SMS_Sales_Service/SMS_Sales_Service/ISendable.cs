@@ -7,7 +7,7 @@ namespace SMSSender
 {
     interface ISendable
     {
-        void SendSMS(Sms sms);
+        void SendSMS(Sms sms, System.Diagnostics.EventLog eventLog);
         void DoLogin(string userName, string password);
     }
 

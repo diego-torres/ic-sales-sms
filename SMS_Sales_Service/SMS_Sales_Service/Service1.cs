@@ -26,7 +26,7 @@ namespace SMS_Sales_Service
         {
             try
             {
-                myEventLog.WriteEntry("Timer tick.", EventLogEntryType.Information);
+                //myEventLog.WriteEntry("Timer tick.", EventLogEntryType.Information);
                 timer.Stop();
 
                 ConnectionManager connectionManager = new ConnectionManager();
@@ -46,7 +46,7 @@ namespace SMS_Sales_Service
                         timer.Start();
                         return;
                     }
-                    myEventLog.WriteEntry("Begins Process.", EventLogEntryType.Information);
+                    myEventLog.WriteEntry("Inicia Proceso.", EventLogEntryType.Information);
 
                     resetWeek(set);
                     string sScheduled = set.todSchedule;
@@ -69,7 +69,7 @@ namespace SMS_Sales_Service
                 }
                 else
                 {
-                    myEventLog.WriteEntry("Wrong settings. Fix the settings and then restart the service.", EventLogEntryType.Error);
+                    myEventLog.WriteEntry("Configuracion incorrecta. Corrija la configuracion de SMS y posteriormente reinicie el servicio.", EventLogEntryType.Error);
                     return;
                 }
 
@@ -78,7 +78,7 @@ namespace SMS_Sales_Service
             }
             catch (Exception ex)
             {
-                myEventLog.WriteEntry("An error has occurried: " + ex.Message + " " + ex.StackTrace, EventLogEntryType.Error);
+                myEventLog.WriteEntry("Ha ocurrido un error: " + ex.Message + " " + ex.StackTrace, EventLogEntryType.Error);
             }
         }
         protected override void OnStart(string[] args)
@@ -97,7 +97,7 @@ namespace SMS_Sales_Service
 
         protected override void OnStop()
         {
-            myEventLog.WriteEntry("On Stop",EventLogEntryType.Information);
+            myEventLog.WriteEntry("Se detuvo el servicio.",EventLogEntryType.Information);
         }
         private bool DayEnabled(Settings set)
         {
@@ -258,7 +258,7 @@ namespace SMS_Sales_Service
         }
         private void localFiles(Settings set)
         {
-            myEventLog.WriteEntry("Attempting to send sms.", EventLogEntryType.Information);
+            myEventLog.WriteEntry("Intentando envio de SMS.", EventLogEntryType.Information);
             try
             {
                 SalesPickerPostgresql sp = new SalesPickerPostgresql();
@@ -269,19 +269,19 @@ namespace SMS_Sales_Service
                 //sp.SendMethod = SMSSender.CommonConstants.SMS_MAS_MENSAJES;
 
                 sp.RetrieveData();
-                sp.SendSMS();
-                sp.SendBossSMS();
+                sp.SendSMS(myEventLog);
+                sp.SendBossSMS(myEventLog);
             }
             catch (Exception e)
             {
-                myEventLog.WriteEntry("Exception Message: " + e.Message, EventLogEntryType.Error);
-                myEventLog.WriteEntry("Exception StackTrace: " + e.StackTrace, EventLogEntryType.Error);
+                myEventLog.WriteEntry("Mensaje de Exception: " + e.Message, EventLogEntryType.Error);
+                myEventLog.WriteEntry("Pila de Exception: " + e.StackTrace, EventLogEntryType.Error);
             }
             myEventLog.WriteEntry("Archivos locales de simulación de SMS generados exitosamente.", EventLogEntryType.Information);
         }
         private void sendSMS(Settings set)
         {
-            myEventLog.WriteEntry("Attempting to send sms.", EventLogEntryType.Information);
+            myEventLog.WriteEntry("Intentando envio de SMS.", EventLogEntryType.Information);
             
             try
             {
@@ -291,15 +291,13 @@ namespace SMS_Sales_Service
                 sp.Password = set.sms_password;
                 sp.SendMethod = SMSSender.CommonConstants.SMS_MAS_MENSAJES;
                 sp.RetrieveData();
-                sp.SendSMS();
-                sp.SendBossSMS();
-                Console.WriteLine("*******************************************");
-                Console.ReadLine();
+                sp.SendSMS(myEventLog);
+                sp.SendBossSMS(myEventLog);
             }
             catch (Exception e)
             {
-                myEventLog.WriteEntry("Exception Message: " + e.Message, EventLogEntryType.Error);
-                myEventLog.WriteEntry("Exception StackTrace: " + e.StackTrace, EventLogEntryType.Error);
+                myEventLog.WriteEntry("Mensaje de Excepcion: " + e.Message, EventLogEntryType.Error);
+                myEventLog.WriteEntry("Pila de Excepcion: " + e.StackTrace, EventLogEntryType.Error);
             }
             myEventLog.WriteEntry("Proceso de envio de SMS finalizado exitosamente.", EventLogEntryType.SuccessAudit);
         }

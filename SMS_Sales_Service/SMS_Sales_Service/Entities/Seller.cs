@@ -13,6 +13,7 @@ namespace SMSSender.Entities
         public float WeeklyGoal = 0;
         public float CumplimientoSemana = 0;
         public float CumplimientoMensual = 0;
+        public float CumplimientoDiario = 0;
         public long Enterprise_ID = -1;
 
         public Enterprise Empresa = null;

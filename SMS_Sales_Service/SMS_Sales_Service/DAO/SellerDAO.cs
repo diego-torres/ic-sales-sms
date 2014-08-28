@@ -15,7 +15,7 @@ namespace SMSSender.DAO
             List<Seller> result = new List<Seller>();
 
             string sql = "SELECT dim_sellers.seller_id,sms,ap_id,agent_code,agent_name,email,dim_sellers.cellphone,weekly_goal, " +
-                            "id_empresa	,sum(fact_sales.sold_week) AS sold_week	,sum(fact_sales.sold_month) AS sold_month " +
+                            "id_empresa	,sum(fact_sales.sold_week) AS sold_week	,sum(fact_sales.sold_month) AS sold_month, sum(fact_sales.sold_today) AS sold_day " +
                             "FROM dim_sellers LEFT JOIN fact_sales ON dim_sellers.seller_id = fact_sales.seller_id WHERE sms = true  " +
                             "GROUP BY dim_sellers.seller_id,sms,ap_id,agent_code,agent_name,email,dim_sellers.cellphone,weekly_goal,id_empresa";
 
@@ -54,6 +54,14 @@ namespace SMSSender.DAO
                     else
                     {
                         seller.CumplimientoMensual = float.Parse(dt.Rows[i][10].ToString());
+                    }
+                    if (dt.Rows[i][11].ToString() == "")
+                    {
+                        seller.CumplimientoDiario= 0;
+                    }
+                    else
+                    {
+                        seller.CumplimientoDiario = float.Parse(dt.Rows[i][11].ToString());
                     }
                     
                     result.Add(seller);
